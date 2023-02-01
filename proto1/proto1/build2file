@@ -1,6 +1,7 @@
 libs =
 import libs += proto1-model%lib{proto1-model}
 import libs += libsfml-graphics%lib{sfml-graphics}
+import libs += libimgui-framework-sfml%lib{imgui-framework-sfml}
 
 exe{proto1}: {hxx ixx txx cxx}{**} $libs # testscript
 
