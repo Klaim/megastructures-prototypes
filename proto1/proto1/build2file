@@ -1,5 +1,5 @@
 libs =
-#import libs += libhello%lib{hello}
+import libs += proto1-model%lib{proto1-model}
 
 exe{proto1}: {hxx ixx txx cxx}{**} $libs testscript
 

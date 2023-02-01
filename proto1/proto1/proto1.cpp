@@ -1,4 +1,5 @@
 #include <iostream>
+#include <proto1-model/proto1-model.hpp>
 
 int main (int argc, char* argv[])
 {
@@ -10,5 +11,5 @@ int main (int argc, char* argv[])
     return 1;
   }
 
-  cout << "Hello, " << argv[1] << '!' << endl;
+  proto1_model::say_hello(cout, argv[1]);
 }
