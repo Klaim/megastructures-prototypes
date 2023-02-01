@@ -1,0 +1,5 @@
+proto1
+
+# Testscript output directory (can be symlink).
+#
+test-proto1

@@ -1,0 +1,6 @@
+$out_root/
+{
+  include proto1-model/
+}
+
+export $out_root/proto1-model/$import.target

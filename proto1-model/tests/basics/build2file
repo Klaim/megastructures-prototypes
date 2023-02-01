@@ -1,0 +1,3 @@
+import libs = proto1-model%lib{proto1-model}
+
+exe{driver}: {hxx ixx txx cxx}{**} $libs testscript{**}

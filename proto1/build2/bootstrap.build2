@@ -1,0 +1,7 @@
+project = proto1
+
+using version
+using config
+using test
+using install
+using dist

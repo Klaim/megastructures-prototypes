@@ -1,0 +1,45 @@
+intf_libs = # Interface dependencies.
+impl_libs = # Implementation dependencies.
+#import xxxx_libs += libhello%lib{hello}
+
+lib{proto1-model}: {hxx ixx txx cxx}{** -version} hxx{version} $impl_libs $intf_libs
+
+hxx{version}: in{version} $src_root/manifest
+
+hxx{export}@./: cxx.importable = false
+
+# Build options.
+#
+cxx.poptions =+ "-I$out_root" "-I$src_root"
+
+{hbmia obja}{*}: cxx.poptions += -DPROTO1_MODEL_STATIC_BUILD
+{hbmis objs}{*}: cxx.poptions += -DPROTO1_MODEL_SHARED_BUILD
+
+# Export options.
+#
+lib{proto1-model}:
+{
+  cxx.export.poptions = "-I$out_root" "-I$src_root"
+  cxx.export.libs = $intf_libs
+}
+
+liba{proto1-model}: cxx.export.poptions += -DPROTO1_MODEL_STATIC
+libs{proto1-model}: cxx.export.poptions += -DPROTO1_MODEL_SHARED
+
+# For pre-releases use the complete version to make sure they cannot be used
+# in place of another pre-release or the final version. See the version module
+# for details on the version.* variable values.
+#
+if $version.pre_release
+  lib{proto1-model}: bin.lib.version = "-$version.project_id"
+else
+  lib{proto1-model}: bin.lib.version = "-$version.major.$version.minor"
+
+# Install into the proto1-model/ subdirectory of, say, /usr/include/
+# recreating subdirectories.
+#
+{hxx ixx txx}{*}:
+{
+  install         = include/proto1-model/
+  install.subdirs = true
+}
