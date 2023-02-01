@@ -1,6 +1,6 @@
 libs =
 import libs += proto1-model%lib{proto1-model}
 
-exe{proto1}: {hxx ixx txx cxx}{**} $libs testscript
+exe{proto1}: {hxx ixx txx cxx}{**} $libs # testscript
 
 cxx.poptions =+ "-I$out_root" "-I$src_root"
