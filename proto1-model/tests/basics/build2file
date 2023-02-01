@@ -1,3 +1,3 @@
-import libs = proto1-model%lib{proto1-model}
+import libs = proto1-model%lib{proto1-model} # doctest%liba{doctest}
 
 exe{driver}: {hxx ixx txx cxx}{**} $libs testscript{**}
