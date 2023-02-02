@@ -14,9 +14,13 @@ const fs::path data_dir{ "data/" };
 const auto font_path = data_dir / "arial.ttf";
 
 
+consteval bool must_force_environment_to_local() {   
+    return BOOST_OS_WINDOWS or BOOST_OS_UNIX or BOOST_OS_MACOS;
+}
+
 int main(int argc, char** args)
 {
-    if constexpr(BOOST_OS_WINDOWS or BOOST_OS_UNIX or BOOST_OS_MACOS)
+    if constexpr( must_force_environment_to_local() )
     {
         // Force the directory where this executable is be the root of our environment
         // from this point on.
