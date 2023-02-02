@@ -74,8 +74,6 @@ int main(int argc, char** args)
         Character{ font,'Q', { 100, 100 } },
     };
 
-
-
     sf::Clock deltaClock;
     // Start the game loop
     while (window.isOpen())
