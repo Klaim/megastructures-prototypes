@@ -12,7 +12,9 @@ depends: * build2 >= 0.15.0
 depends: * bpkg >= 0.15.0
 
 depends: proto1-model == $
+depends: fmt ^9.1.0
 depends: {libsfml-system libsfml-window libsfml-graphics} ^2.5.1
 depends: {tl-optional tl-expected} ^1.0.0
 depends: gsl ^3.1.0
 depends: libimgui-framework-sfml ^2.5.0
+depends: libboost-predef ^1.78.0

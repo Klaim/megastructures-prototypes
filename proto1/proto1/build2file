@@ -1,8 +1,13 @@
 libs =
+import libs += fmt%lib{fmt} libboost-predef%lib{boost_predef}
 import libs += proto1-model%lib{proto1-model}
 import libs += libsfml-graphics%lib{sfml-graphics}
 import libs += libimgui-framework-sfml%lib{imgui-framework-sfml}
 
 exe{proto1}: {hxx ixx txx cxx}{**} $libs # testscript
+exe{proto1}: data/file{**}
 
 cxx.poptions =+ "-I$out_root" "-I$src_root"
+
+
+data/file{**}: install = bin/data/

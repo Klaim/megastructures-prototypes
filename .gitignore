@@ -4,3 +4,11 @@
 # Local default options files.
 #
 .build2/local/
+
+# Useful directories usually around but temporary
+/install
+/build-*
+
+
+# IMGUI generated files
+imgui.ini
