@@ -1,5 +1,6 @@
 #include <filesystem>
 #include <exception>
+#include <vector>
 
 #include <boost/predef/os.h>
 
@@ -13,6 +14,33 @@ namespace fs = std::filesystem;
 const fs::path data_dir{ "data/" };
 const auto font_path = data_dir / "arial.ttf";
 
+class Character
+{
+    sf::Text m_text;
+    sf::RectangleShape m_background;
+public:
+
+    explicit Character(sf::Font& font, char letter, sf::Vector2f initial_position)
+        : m_text{ std::string{letter}, font, 20 }
+        , m_background{ sf::Vector2f{ 30, 30 } }
+    {
+        set_position(initial_position);
+        m_text.setFillColor(sf::Color::Blue);
+    }
+
+    void draw(sf::RenderWindow& window) const
+    {
+        window.draw(m_background);
+        window.draw(m_text);
+    }
+
+    void set_position(sf::Vector2f new_position)
+    {
+        m_background.setPosition(new_position);
+        m_text.setPosition(new_position);
+    }
+
+};
 
 consteval bool must_force_environment_to_local() {   
     return BOOST_OS_WINDOWS or BOOST_OS_UNIX or BOOST_OS_MACOS;
@@ -40,7 +68,13 @@ int main(int argc, char** args)
     if (!font.loadFromFile(font_path.string()))
         throw std::runtime_error("no font file found");
 
-    sf::Text text("Hello SFML", font, 50);
+    std::vector<Character> characters
+    {
+        Character{ font,'@', { 10, 10 }},
+        Character{ font,'Q', { 100, 100 } },
+    };
+
+
 
     sf::Clock deltaClock;
     // Start the game loop
@@ -63,7 +97,10 @@ int main(int argc, char** args)
 
         window.clear();
 
-        window.draw(text);
+        for(const auto& character : characters)
+        {
+            character.draw(window);
+        }
 
         ImGui::SFML::Render(window);
         window.display();
