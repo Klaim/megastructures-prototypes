@@ -42,7 +42,7 @@ public:
 
 };
 
-consteval bool must_force_environment_to_local() {   
+consteval bool must_force_environment_to_local() {
     return BOOST_OS_WINDOWS or BOOST_OS_UNIX or BOOST_OS_MACOS;
 }
 
@@ -63,7 +63,7 @@ int main(int argc, char** args)
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
     ImGui::SFML::Init(window);
-    
+
     sf::Font font;
     if (!font.loadFromFile(font_path.string()))
         throw std::runtime_error("no font file found");
