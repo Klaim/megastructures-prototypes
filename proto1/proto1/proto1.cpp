@@ -1,13 +1,17 @@
 #include <filesystem>
 #include <exception>
 #include <vector>
+#include <array>
 
 #include <boost/predef/os.h>
-
+#include <magic_enum.hpp>
 #include <fmt/core.h>
 #include <SFML/Graphics.hpp>
 #include <imgui/imgui.h>
 #include <imgui/backends/imgui-SFML.h>
+
+#include <proto1-model/proto1-model.hpp>
+
 
 namespace proto1
 {
@@ -16,21 +20,58 @@ namespace proto1
 
     namespace view
     {
-            
+        struct Description
+        {
+            char letter = '\0';
+            sf::Color letter_color = sf::Color::Magenta;
+            sf::Color background_color = sf::Color::White;
+        };
 
-        class Character
+        
+        enum class EntityKind
+        {
+            player, npc, walls
+        };
+        
+
+        const Description& get_description(const EntityKind& kind)
+        {
+            static std::array<Description, magic_enum::enum_count<EntityKind>()> descriptions{
+                Description{ .letter = '@'  , .letter_color = sf::Color::White  , .background_color = sf::Color::Black  },
+                Description{ .letter = 'Q'  , .letter_color = sf::Color::Yellow , .background_color = sf::Color::Black  },
+                Description{ .letter = '#'  , .letter_color = sf::Color::Black  , .background_color = sf::Color::White  },
+            };
+
+            return descriptions[static_cast<std::size_t>(kind)];
+        }
+        
+        constexpr float GRID_SQUARE_SIZE = 30.0f;
+
+        sf::Vector2f to_view_position(const model::Position& position)
+        {
+            return { position.x * GRID_SQUARE_SIZE, position.y * GRID_SQUARE_SIZE };
+        }
+
+
+        class Entity
         {
             sf::Text m_text;
             sf::RectangleShape m_background;
         public:
 
-            explicit Character(sf::Font& font, char letter, sf::Vector2f initial_position)
-                : m_text{ std::string{letter}, font, 20 }
-                , m_background{ sf::Vector2f{ 30, 30 } }
+            Entity(const sf::Font& font, const Description& desc, sf::Vector2f initial_position)
+                : m_text{ std::string{desc.letter}, font, 20 }
+                , m_background{ sf::Vector2f{ GRID_SQUARE_SIZE, GRID_SQUARE_SIZE } }
             {
                 set_position(initial_position);
-                m_text.setFillColor(sf::Color::Blue);
+                m_text.setFillColor(desc.letter_color);
+                m_background.setFillColor(desc.background_color);
             }
+
+            Entity(const Entity&) = default;
+            Entity(Entity&&) noexcept = default;
+            Entity& operator=(const Entity&) = default;
+            Entity& operator=(Entity&&) noexcept = default;
 
             void draw(sf::RenderWindow& window) const
             {
@@ -45,6 +86,24 @@ namespace proto1
             }
 
         };
+
+        struct Config
+        {
+            sf::Font font;
+        };
+
+        std::vector<Entity> create_view(const model::World& world, const Config& config)
+        {
+            std::vector<Entity> all_views;
+
+            const auto& wall_desc = get_description(EntityKind::walls);
+            for(const auto& wall_pos : world.area.walls)
+                all_views.emplace_back(config.font, wall_desc, to_view_position(wall_pos));
+
+
+            return all_views;
+        }
+
     }
 
     static const fs::path data_dir{ "data/" };
@@ -76,15 +135,12 @@ int main(int argc, char** args)
     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
     ImGui::SFML::Init(window);
 
-    sf::Font font;
-    if (!font.loadFromFile(font_path.string()))
+    view::Config view_config;
+    if (!view_config.font.loadFromFile(font_path.string()))
         throw std::runtime_error("no font file found");
 
-    std::vector<view::Character> characters
-    {
-        view::Character{ font,'@', { 10, 10 }},
-        view::Character{ font,'Q', { 100, 100 } },
-    };
+    auto world = model::create_test_world();
+    std::vector<view::Entity> entities = view::create_view(world, view_config);
 
     sf::Clock deltaClock;
     // Start the game loop
@@ -107,9 +163,9 @@ int main(int argc, char** args)
 
         window.clear();
 
-        for(const auto& character : characters)
+        for(const auto& entity : entities)
         {
-            character.draw(window);
+            entity.draw(window);
         }
 
         ImGui::SFML::Render(window);

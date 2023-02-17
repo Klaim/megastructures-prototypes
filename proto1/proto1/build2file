@@ -1,5 +1,5 @@
 libs =
-import libs += fmt%lib{fmt} libboost-predef%lib{boost_predef}
+import libs += fmt%lib{fmt} libboost-predef%lib{boost_predef} magic_enum%lib{magic_enum}
 import libs += proto1-model%lib{proto1-model}
 import libs += libsfml-graphics%lib{sfml-graphics}
 import libs += libimgui-framework-sfml%lib{imgui-framework-sfml}
