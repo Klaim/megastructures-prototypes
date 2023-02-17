@@ -132,7 +132,7 @@ int main(int argc, char** args)
         throw std::runtime_error("no data directory found");
 
     // Create the main window
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window", sf::Style::Default | sf::Style::Resize);
     ImGui::SFML::Init(window);
 
     view::Config view_config;
