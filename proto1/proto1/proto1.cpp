@@ -100,6 +100,24 @@ namespace proto1
             for(const auto& wall_pos : world.area.walls)
                 all_views.emplace_back(config.font, wall_desc, to_view_position(wall_pos));
 
+            const auto& player_desc = get_description(EntityKind::player);
+            const auto& npc_desc = get_description(EntityKind::npc);
+            auto bodies_view = world.entities_compoments.view<const model::Body>();
+            for(const auto& [entity_id, body] : bodies_view.each())
+            {
+                const bool is_player = [&]{
+                    if(not body.controlling_actor_id)
+                        return false;
+                    auto actor_it = world.actors.find(body.controlling_actor_id.value());
+                    if(world.actors.end() == actor_it)
+                        return false;
+
+                    return actor_it->second.kind == model::Actor::Kind::player;
+                }();
+                const auto& desc = get_description( is_player ? EntityKind::player : EntityKind::npc );
+                all_views.emplace_back(config.font, desc, to_view_position(body.position));
+
+            }
 
             return all_views;
         }
