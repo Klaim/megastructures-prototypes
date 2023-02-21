@@ -2,3 +2,5 @@
 location: proto1/
 :
 location: proto1-model/
+:
+location: std_generator/
