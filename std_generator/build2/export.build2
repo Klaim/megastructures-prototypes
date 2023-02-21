@@ -1,6 +1,0 @@
-$out_root/
-{
-  include std_generator/
-}
-
-export $out_root/std_generator/$import.target

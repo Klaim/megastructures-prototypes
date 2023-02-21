@@ -1,0 +1,6 @@
+$out_root/
+{
+  include stdx/
+}
+
+export $out_root/stdx/$import.target

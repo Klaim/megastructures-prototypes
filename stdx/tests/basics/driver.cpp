@@ -2,8 +2,8 @@
 // - https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2022/p2502r2.pdf
 // - https://godbolt.org/z/5hcaPcfvP
 
-#include <std_generator/version.hpp>
-#include <std_generator/generator.hpp>
+#include <stdx/version.hpp>
+#include <stdx/generator.hpp>
 
 
 #include <cassert>

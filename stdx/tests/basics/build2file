@@ -1,3 +1,3 @@
-import libs = std_generator%lib{std_generator}
+import libs = stdx%lib{stdx}
 
 exe{driver}: {hxx ixx txx cxx}{**} $libs testscript{**}

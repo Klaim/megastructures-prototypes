@@ -1,4 +1,4 @@
-project = std_generator
+project = stdx
 
 using version
 using config
