@@ -23,7 +23,7 @@ jobs:
             - os: macos-latest
               toolchain: msvc
 
-    name: Build & Run Tests On Main Configs
+    name: Build & Run Tests
     needs: setup_build2
     runs-on: ${{ matrix.os }}
     steps:
