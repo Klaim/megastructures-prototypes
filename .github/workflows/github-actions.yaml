@@ -25,10 +25,10 @@ jobs:
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - name: Check out repository code
         uses: actions/checkout@v3
-      - uses: build2/setup-build2-github-action@v2
+      - name: Install build2
+        uses: build2/setup-build2-github-action@v2
         with:
           build2-version: staged
-      - name: Caching build2
         uses: actions/cache@v2
         with:
           path: ${{ BUILD2_BUILD_DIR }}
