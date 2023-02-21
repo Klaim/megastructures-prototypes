@@ -15,7 +15,6 @@ jobs:
               toolchain: msvc
 
     name: Build & Run Tests
-    needs: setup_build2
     runs-on: ${{ matrix.os }}
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
