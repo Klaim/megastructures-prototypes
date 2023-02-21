@@ -49,13 +49,13 @@ jobs:
         run: ./init-configs.sh ${{ matrix.toolchain }}
       - name: Build All
         shell: bash
-        run: bdep update -a
+        run: bdep update -a -v
       - name: Run Tests
         shell: bash
-        run: bdep test -a
+        run: bdep test -a -v
       - name: Make sure it works with `b`
         shell: bash
-        run: bdep clean -a && b "{update test}"
+        run: bdep clean -a && b "{update test}" -v
       - name: Install debug
         shell: bash
         run: "b install: build-${{ matrix.toolchain }}-debug"
