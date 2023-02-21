@@ -105,10 +105,11 @@ namespace proto1
             auto bodies_view = world.entities_compoments.view<const model::Body>();
             for(const auto& [entity_id, body] : bodies_view.each())
             {
+                const auto& body_ref = body;
                 const bool is_player = [&]{
-                    if(not body.controlling_actor_id)
+                    if(not body_ref.controlling_actor_id)
                         return false;
-                    auto actor_it = world.actors.find(body.controlling_actor_id.value());
+                    auto actor_it = world.actors.find(body_ref.controlling_actor_id.value());
                     if(world.actors.end() == actor_it)
                         return false;
 
