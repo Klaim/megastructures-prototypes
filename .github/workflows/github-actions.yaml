@@ -1,0 +1,52 @@
+name: Build & Run Tests On Various Configurations
+on: [push]
+
+jobs:
+
+  setup_build2:
+    strategy:
+        matrix:
+          os: [windows-latest, ubuntu-latest, macos-latest]
+    name: Install build2
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: build2/setup-build2-github-action@v2
+    
+  build_run_tests:
+    strategy:
+        matrix:
+          os: [windows-latest, ubuntu-latest, macos-latest]
+          toolchain: [clang, msvc, gcc]
+          exclude:
+            - os: ubuntu-latest
+              toolchain: msvc
+            - os: macos-latest
+              toolchain: msvc
+
+    name: Build & Run Tests On Main Configs
+    needs: setup_build2
+    runs-on: ${{ matrix.os }}
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+      - name: List files in the repository
+        run: ls ${{ github.workspace }}
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+      - name: Create all build configurations
+        shell: bash
+        run: ./init-configs.sh ${{ matrix.toolchain }}
+      - name: Build All
+        shell: bash
+        run: bdep update -a
+      - name: Run Tests
+        shell: bash
+        run: bdep test -a
+      - name: Make sure it works with `b`
+        shell: bash
+        run: bdep clean -a && b "{update test}"
+
