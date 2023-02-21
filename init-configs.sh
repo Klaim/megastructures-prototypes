@@ -9,7 +9,7 @@ command=$2
 set -e
 
 # Delete all the previous configs.
-if [ $command = '--clean' ]
+if [[ $command = '--clean' ]]
 then
     echo "Deleting previous configurations, install, etc..."
     rm -rf ./build-*/ ./install/ .bdep/
