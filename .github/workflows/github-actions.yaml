@@ -36,9 +36,10 @@ jobs:
       - run: echo "🍏 This job's status is ${{ job.status }}."
       - name: "Install dependencies (Ubuntu only)"
         shell: bash
-        run: if [[ "$OSTYPE" =~ "^linux" ]]; then \
-              sudo apt-get update && sudo apt-get install -y libx11-dev libxrandr-dev libudev-dev libglu1-mesa-dev freeglut3-dev mesa-common-dev xorg-dev libvulkan-dev ; \
-            fi
+        run: |
+              if [[ "$OSTYPE" =~ "^linux" ]]; then \
+                sudo apt-get update && sudo apt-get install -y libx11-dev libxrandr-dev libudev-dev libglu1-mesa-dev freeglut3-dev mesa-common-dev xorg-dev libvulkan-dev ; \
+              fi
       - name: Create all build configurations
         shell: bash
         run: ./init-configs.sh ${{ matrix.toolchain }}
