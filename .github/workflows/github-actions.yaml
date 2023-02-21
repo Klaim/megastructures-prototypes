@@ -45,9 +45,9 @@ jobs:
         run: bdep clean -a && b "{update test}"
       - name: Install debug
         shell: bash
-        run: b install: build-${{ matrix.toolchain }}-debug
+        run: "b install: build-${{ matrix.toolchain }}-debug"
       - name: Install release
         shell: bash
-        run: b install: build-${{ matrix.toolchain }}-release
+        run: "b install: build-${{ matrix.toolchain }}-release"
 
 
