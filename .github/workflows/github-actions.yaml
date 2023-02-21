@@ -32,8 +32,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ BUILD2_BUILD_DIR }}
-          key: ${{ runner.os }}-${{ matrix.compiler }}-${{matrix.build_type}}-${{matrix.generator}}-${{matrix.developer_mode}}-${{ hashFiles($BUILD2_BUILD_DIR/**) }}
-          restore-keys: ${{ runner.os }}-${{ matrix.compiler }}-${{matrix.build_type}}-${{matrix.generator}}-${{matrix.developer_mode}}
+          key: ${{ runner.os }}-${{ hashFiles($BUILD2_BUILD_DIR/**) }}
+          restore-keys: ${{ runner.os }}
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
       - name: List files in the repository
