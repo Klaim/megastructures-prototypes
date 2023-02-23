@@ -29,6 +29,10 @@ jobs:
       - name: List files in the repository
         shell: bash
         run: ls -la "${{ github.workspace }}"
+      - name: Install recent LLVM and Clang
+        uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: "15"
       - name: Install build2
         uses: build2/setup-build2-github-action@v2
         with:
