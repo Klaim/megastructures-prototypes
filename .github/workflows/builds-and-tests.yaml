@@ -33,16 +33,19 @@ jobs:
         uses: KyleMayes/install-llvm-action@v1
         with:
           version: "15"
-      - name: Install build2
-        uses: build2/setup-build2-github-action@v2
-        with:
-          build2-version: staged
       # - name: Cache build2 install
       #   uses: actions/cache@v3
       #   with:
       #     path: ${{ BUILD2_BUILD_DIR }}
       #     key: build2-${{ runner.os }}-${{ hashFiles($BUILD2_BUILD_DIR/**) }}
       #     restore-keys: build2-${{ runner.os }}
+      - name: Install build2
+        uses: build2/setup-build2-github-action@v2
+        with:
+          build2-version: staged
+      - name: build2 setup info
+        shell: bash
+        run: b --version && bdep --version && bpkg --version
       - run: echo "🍏 This job's status is ${{ job.status }}."
       - name: "Install dependencies (Ubuntu only)"
         if: runner.os == 'Linux'

@@ -21,8 +21,10 @@ bdep init --empty
 # The first configuration initialized will be considered the default config. We use Debug as default.
 echo "Projects initialization in new configurations... (debug as default)"
 common_config="config.install.root=./install/"
-bdep init -C build-$toolchain-debug    @$toolchain-debug      cc config.config.load=build2-configs/$toolchain-debug.config   $common_config$toolchain-debug
-bdep init -C build-$toolchain-release  @$toolchain-release    cc config.config.load=build2-configs/$toolchain-release.config $common_config$toolchain-release
+bdep init --empty
+bdep config create -V @$toolchain-debug build-$toolchain-debug     cc config.config.load=build2-configs/$toolchain-debug.config   $common_config$toolchain-debug
+bdep config create -V @$toolchain-release build-$toolchain-release cc config.config.load=build2-configs/$toolchain-release.config $common_config$toolchain-release
+bdep init --all
 
 echo "Configurations Ready:"
 bdep config list
