@@ -35,7 +35,7 @@ namespace proto1::model
         int height;
     };
 
-    Position operator+(const Position& left, const Size& right)
+    inline Position operator+(const Position& left, const Size& right)
     {
         return { left.x + right.width, left.y + right.height };
     }
@@ -103,6 +103,13 @@ namespace proto1::model
 
     PROTO1_MODEL_SYMEXPORT 
     World create_test_world();
+
+    struct Event{};
+
+    struct TurnInfo
+    {
+        std::vector<Event> events;
+    };
 
 
 }

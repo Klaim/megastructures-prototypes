@@ -4,127 +4,22 @@
 #include <array>
 
 #include <boost/predef/os.h>
-#include <magic_enum.hpp>
 #include <fmt/core.h>
-#include <SFML/Graphics.hpp>
+
 #include <imgui/imgui.h>
 #include <imgui/backends/imgui-SFML.h>
 
 #include <proto1-model/proto1-model.hpp>
+
+#include <proto1/view.hpp>
+#include <proto1/ui.hpp>
+
 
 
 namespace proto1
 {
 
     namespace fs = std::filesystem;
-
-    namespace view
-    {
-        struct Description
-        {
-            char letter = '\0';
-            sf::Color letter_color = sf::Color::Magenta;
-            sf::Color background_color = sf::Color::White;
-        };
-
-        
-        enum class EntityKind
-        {
-            player, npc, walls
-        };
-        
-
-        const Description& get_description(const EntityKind& kind)
-        {
-            static std::array<Description, magic_enum::enum_count<EntityKind>()> descriptions{
-                Description{ .letter = '@'  , .letter_color = sf::Color::White  , .background_color = sf::Color::Black  },
-                Description{ .letter = 'Q'  , .letter_color = sf::Color::Yellow , .background_color = sf::Color::Black  },
-                Description{ .letter = '#'  , .letter_color = sf::Color::Black  , .background_color = sf::Color::White  },
-            };
-
-            return descriptions[static_cast<std::size_t>(kind)];
-        }
-        
-        constexpr float GRID_SQUARE_SIZE = 30.0f;
-
-        sf::Vector2f to_view_position(const model::Position& position)
-        {
-            return { position.x * GRID_SQUARE_SIZE, position.y * GRID_SQUARE_SIZE };
-        }
-
-
-        class Entity
-        {
-            sf::Text m_text;
-            sf::RectangleShape m_background;
-        public:
-
-            Entity(const sf::Font& font, const Description& desc, sf::Vector2f initial_position)
-                : m_text{ std::string{desc.letter}, font, 20 }
-                , m_background{ sf::Vector2f{ GRID_SQUARE_SIZE, GRID_SQUARE_SIZE } }
-            {
-                set_position(initial_position);
-                m_text.setFillColor(desc.letter_color);
-                m_background.setFillColor(desc.background_color);
-            }
-
-            Entity(const Entity&) = default;
-            Entity(Entity&&) noexcept = default;
-            Entity& operator=(const Entity&) = default;
-            Entity& operator=(Entity&&) noexcept = default;
-
-            void draw(sf::RenderWindow& window) const
-            {
-                window.draw(m_background);
-                window.draw(m_text);
-            }
-
-            void set_position(sf::Vector2f new_position)
-            {
-                m_background.setPosition(new_position);
-                m_text.setPosition(new_position);
-            }
-
-        };
-
-        struct Config
-        {
-            sf::Font font;
-        };
-
-        std::vector<Entity> create_view(const model::World& world, const Config& config)
-        {
-            std::vector<Entity> all_views;
-
-            const auto& wall_desc = get_description(EntityKind::walls);
-            for(const auto& wall_pos : world.area.walls)
-                all_views.emplace_back(config.font, wall_desc, to_view_position(wall_pos));
-
-            const auto& player_desc = get_description(EntityKind::player);
-            const auto& npc_desc = get_description(EntityKind::npc);
-            auto bodies_view = world.entities_compoments.view<const model::Body>();
-            for(const auto& [entity_id, body] : bodies_view.each())
-            {
-                const auto& body_ref = body;
-                const bool is_player = [&]{
-                    if(not body_ref.controlling_actor_id)
-                        return false;
-                    auto actor_it = world.actors.find(body_ref.controlling_actor_id.value());
-                    if(world.actors.end() == actor_it)
-                        return false;
-
-                    return actor_it->second.kind == model::Actor::Kind::player;
-                }();
-                const auto& desc = get_description( is_player ? EntityKind::player : EntityKind::npc );
-                all_views.emplace_back(config.font, desc, to_view_position(body.position));
-
-            }
-
-            return all_views;
-        }
-
-    }
-
     static const fs::path data_dir{ "data/" };
     static const auto font_path = data_dir / "arial.ttf";
 
@@ -158,14 +53,15 @@ int main(int argc, char** args)
     if (!view_config.font.loadFromFile(font_path.string()))
         throw std::runtime_error("no font file found");
 
+
     auto world = model::create_test_world();
-    std::vector<view::Entity> entities = view::create_view(world, view_config);
+    view::View world_view{ world, std::move(view_config) };
 
     sf::Clock deltaClock;
     // Start the game loop
     while (window.isOpen())
     {
-        // Process events
+        // Process events / acquire inputs
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -174,19 +70,23 @@ int main(int argc, char** args)
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+        // update input
+
+
+        // update ui
         ImGui::SFML::Update(window, deltaClock.restart());
+        ui::update_ui();
 
-        ImGui::Begin("Hello, world!");
-        ImGui::Button("Look at this pretty button");
-        ImGui::End();
+        // update the game's state
 
+        model::TurnInfo turn_info;
+
+        // update the view's state
+        world_view.update(turn_info);
+
+        // display
         window.clear();
-
-        for(const auto& entity : entities)
-        {
-            entity.draw(window);
-        }
-
+        world_view.draw(window);
         ImGui::SFML::Render(window);
         window.display();
     }
