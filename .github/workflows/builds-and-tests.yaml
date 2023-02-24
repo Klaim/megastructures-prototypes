@@ -8,14 +8,18 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
-        toolchain: [msvc, gcc] # clang,  - TODO: add clang (and therefore MacOS) back once it handles coroutines correctly
+        toolchain: [msvc, gcc, clang]
         exclude:
           - os: ubuntu-latest
             toolchain: msvc
+          - os: ubuntu-latest # TODO: Remove this one once the clang with libc++ is fixed
+            toolchain: clang
           - os: macos-latest
             toolchain: msvc
-          - os: macos-latest
+          - os: macos-latest # TODO: Remove this one once the clang of the system is fixed
             toolchain: gcc
+          - os: macos-latest # TODO: Remove this one once the clang on macos is fixed
+            toolchain: clang
           - os: windows-latest
             toolchain: gcc
 
