@@ -57,14 +57,9 @@ jobs:
       - name: Info about gcc
         if: matrix.toolchain == 'gcc'
         run: g++ --version
-        
-      - uses: ilammy/msvc-dev-cmd@v1
-        if: matrix.toolchain == 'msvc'
-        with:
-          arch: amd64
-      - name: Info about msvc
-        if: matrix.toolchain == 'msvc'
-        run: cl
+      # We omit trying to find `cl` from msvc because it's annoying, and the info is already in steps below.
+      - name: Info about toolchain
+        run: echo "Look into "Create all build configurations" step for details about the toolchain.
 
       - name: "Install dependencies (Ubuntu only)"
         if: runner.os == 'Linux'
@@ -76,13 +71,13 @@ jobs:
         run: ./init-configs.sh ${{ matrix.toolchain }}
       - name: Build All
         shell: bash
-        run: bdep update -a -v
+        run: bdep update -a
       - name: Run Tests
         shell: bash
-        run: bdep test -a -v
+        run: bdep test -a
       - name: Make sure it works with `b`
         shell: bash
-        run: bdep clean -a && b "{update test}" -v
+        run: bdep clean -a && b "{update test}"
       - name: Install debug
         shell: bash
         run: "b install: build-${{ matrix.toolchain }}-debug/"
