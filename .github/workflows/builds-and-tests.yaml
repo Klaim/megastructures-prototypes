@@ -29,10 +29,18 @@ jobs:
       - name: List files in the repository
         shell: bash
         run: ls -la "${{ github.workspace }}"
+
       - name: Install recent LLVM and Clang
+        if: matrix.toolchain == 'clang'
         uses: KyleMayes/install-llvm-action@v1
         with:
           version: "15"
+          env: true
+      - name: Info about clang
+        if: matrix.toolchain == 'clang'
+        shell: bash
+        run: clang++ --version
+
       # - name: Cache build2 install
       #   uses: actions/cache@v3
       #   with:
