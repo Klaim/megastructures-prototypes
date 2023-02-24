@@ -30,17 +30,6 @@ jobs:
         shell: bash
         run: ls -la "${{ github.workspace }}"
 
-      - name: Install recent LLVM and Clang
-        if: matrix.toolchain == 'clang'
-        uses: KyleMayes/install-llvm-action@v1
-        with:
-          version: "15"
-          env: true
-      - name: Info about clang
-        if: matrix.toolchain == 'clang'
-        shell: bash
-        run: clang++ --version
-
       # - name: Cache build2 install
       #   uses: actions/cache@v3
       #   with:
@@ -55,10 +44,28 @@ jobs:
         shell: bash
         run: b --version && bdep --version && bpkg --version
       - run: echo "🍏 This job's status is ${{ job.status }}."
+
+      - name: Install recent LLVM and Clang
+        if: matrix.toolchain == 'clang'
+        uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: "15"
+
+      - name: Info about clang
+        if: matrix.toolchain == 'clang'
+        run: clang++ --version
+      - name: Info about gcc
+        if: matrix.toolchain == 'gcc'
+        run: g++ --version
+      - name: Info about msvc
+        if: matrix.toolchain == 'msvc'
+        run: cl
+
       - name: "Install dependencies (Ubuntu only)"
         if: runner.os == 'Linux'
         shell: bash
         run: sudo apt-get update && sudo apt-get install -y libx11-dev libxrandr-dev libudev-dev libglu1-mesa-dev freeglut3-dev mesa-common-dev xorg-dev libvulkan-dev
+      
       - name: Create all build configurations
         shell: bash
         run: ./init-configs.sh ${{ matrix.toolchain }}
