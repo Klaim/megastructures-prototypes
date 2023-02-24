@@ -59,7 +59,7 @@ jobs:
         run: g++ --version
       # We omit trying to find `cl` from msvc because it's annoying, and the info is already in steps below.
       - name: Info about toolchain
-        run: echo "Look into 'Create all build configurations' step for details about the toolchain.
+        run: echo "Look into 'Create all build configurations' step for details about the toolchain."
 
       - name: "Install dependencies (Ubuntu only)"
         if: runner.os == 'Linux'
