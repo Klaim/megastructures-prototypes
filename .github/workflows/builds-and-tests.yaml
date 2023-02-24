@@ -14,6 +14,8 @@ jobs:
             toolchain: msvc
           - os: macos-latest
             toolchain: msvc
+          - os: macos-latest
+            toolchain: gcc
           - os: windows-latest
             toolchain: gcc
 
