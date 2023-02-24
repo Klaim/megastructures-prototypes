@@ -8,7 +8,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
-        toolchain: [clang, msvc, gcc]
+        toolchain: [msvc, gcc] # clang,  - TODO: add clang (and therefore MacOS) back once it handles coroutines correctly
         exclude:
           - os: ubuntu-latest
             toolchain: msvc
