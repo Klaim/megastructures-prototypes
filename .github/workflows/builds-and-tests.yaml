@@ -57,6 +57,11 @@ jobs:
       - name: Info about gcc
         if: matrix.toolchain == 'gcc'
         run: g++ --version
+        
+      - uses: ilammy/msvc-dev-cmd@v1
+        if: matrix.toolchain == 'msvc'
+        with:
+          arch: amd64
       - name: Info about msvc
         if: matrix.toolchain == 'msvc'
         run: cl
