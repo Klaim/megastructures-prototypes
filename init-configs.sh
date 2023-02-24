@@ -9,7 +9,7 @@ command=$2
 set -e
 
 # Delete all the previous configs.
-if [ $command = '--clean' ]
+if [[ $command = '--clean' ]]
 then
     echo "Deleting previous configurations, install, etc..."
     rm -rf ./build-*/ ./install/ .bdep/
@@ -20,9 +20,11 @@ bdep init --empty
 # Create all the configurations and initialize all the projects at the same time.
 # The first configuration initialized will be considered the default config. We use Debug as default.
 echo "Projects initialization in new configurations... (debug as default)"
-common_config="config.install.root=./install/"
-bdep init -C build-$toolchain-debug    @$toolchain-debug      cc config.config.load=build2-configs/$toolchain-debug.config   $common_config$toolchain-debug
-bdep init -C build-$toolchain-release  @$toolchain-release    cc config.config.load=build2-configs/$toolchain-release.config $common_config$toolchain-release
+install_config="config.install.root=./install/"
+bdep init --empty
+bdep config create -V @$toolchain-debug build-$toolchain-debug     cc config.config.load=build2-configs/$toolchain-debug.config   $install_config$toolchain-debug
+bdep config create -V @$toolchain-release build-$toolchain-release cc config.config.load=build2-configs/$toolchain-release.config $install_config$toolchain-release
+bdep init --all
 
 echo "Configurations Ready:"
 bdep config list

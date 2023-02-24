@@ -1,0 +1,90 @@
+name: Build & Run Tests On Various Configurations
+on: [push]
+
+jobs:
+
+  build_run_tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        toolchain: [msvc, gcc] # clang,  - TODO: add clang (and therefore MacOS) back once it handles coroutines correctly
+        exclude:
+          - os: ubuntu-latest
+            toolchain: msvc
+          - os: macos-latest
+            toolchain: msvc
+          - os: macos-latest
+            toolchain: gcc
+          - os: windows-latest
+            toolchain: gcc
+
+    name: Build & Run Tests
+    runs-on: ${{ matrix.os }}
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - name: List files in the repository
+        shell: bash
+        run: ls -la "${{ github.workspace }}"
+
+      # - name: Cache build2 install
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ${{ BUILD2_BUILD_DIR }}
+      #     key: build2-${{ runner.os }}-${{ hashFiles($BUILD2_BUILD_DIR/**) }}
+      #     restore-keys: build2-${{ runner.os }}
+      - name: Install build2
+        uses: build2/setup-build2-github-action@v2
+        with:
+          build2-version: staged
+      - name: build2 setup info
+        shell: bash
+        run: b --version && bdep --version && bpkg --version
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+
+      - name: Install recent LLVM and Clang
+        if: matrix.toolchain == 'clang'
+        uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: "15"
+
+      - name: Info about clang
+        if: matrix.toolchain == 'clang'
+        run: clang++ --version
+      - name: Info about gcc
+        if: matrix.toolchain == 'gcc'
+        run: g++ --version
+      # We omit trying to find `cl` from msvc because it's annoying, and the info is already in steps below.
+      - name: Info about toolchain
+        run: echo "Look into 'Create all build configurations' step for details about the toolchain."
+
+      - name: "Install dependencies (Ubuntu only)"
+        if: runner.os == 'Linux'
+        shell: bash
+        run: sudo apt-get update && sudo apt-get install -y libx11-dev libxrandr-dev libudev-dev libglu1-mesa-dev freeglut3-dev mesa-common-dev xorg-dev libvulkan-dev
+      
+      - name: Create all build configurations
+        shell: bash
+        run: ./init-configs.sh ${{ matrix.toolchain }}
+      - name: Build All
+        shell: bash
+        run: bdep update -a
+      - name: Run Tests
+        shell: bash
+        run: bdep test -a
+      - name: Make sure it works with `b`
+        shell: bash
+        run: bdep clean -a && b "{update test}"
+      - name: Install debug
+        shell: bash
+        run: "b install: build-${{ matrix.toolchain }}-debug/"
+      - name: Install release
+        shell: bash
+        run: "b install: build-${{ matrix.toolchain }}-release/"
+
+
