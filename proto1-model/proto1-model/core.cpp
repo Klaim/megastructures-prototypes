@@ -1,4 +1,4 @@
-#include <proto1-model/proto1-model.hpp>
+#include <proto1-model/core.hpp>
 
 #include <random>
 #include <functional>

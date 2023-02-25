@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include <proto1-model/proto1-model.hpp>
+#include <proto1-model/core.hpp>
 
 namespace proto1::view
 {
