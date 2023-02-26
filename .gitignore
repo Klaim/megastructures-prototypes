@@ -12,3 +12,6 @@
 
 # IMGUI generated files
 imgui.ini
+
+
+/compile_commands.json

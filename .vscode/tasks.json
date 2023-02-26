@@ -2,7 +2,8 @@
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "build all in debug with symlinks",
+            "label": "build&test",
+            "detail": "Builds all the projects in the default configuration, setup symlinks for binaries and run their tests. This is an incremental build.",
             "command": "b",
             "args": [ "{update test}" ],
             "options": {
@@ -15,7 +16,6 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "detail": "Uses `b` and not `bdep update`"
         }
     ],
     "version": "2.0.0"
