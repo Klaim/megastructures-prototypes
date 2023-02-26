@@ -8,7 +8,7 @@ see : https://docs.google.com/presentation/d/1YOBf4iuNcZKgCnOEpWVkoMfEHL0yWTOpm8
 
 ### Status
 
-![example event parameter](https://github.com/Klaim/megastructures-prototypes/actions/workflows/builds-and-tests.yml/badge.svg?event=push)
+![github-ci](https://github.com/Klaim/megastructures-prototypes/actions/workflows/builds-and-tests.yaml/badge.svg?event=push)
 
 
 ## Prototype 1 - Overview
