@@ -5,7 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "proto1 (debug on windows)",
+            "name": "proto1 (vs-debug)",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/proto1/proto1/proto1",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "console": "externalTerminal",
+            "preLaunchTask": "${defaultBuildTask}",
+            
+        },
+        {
+            "name": "proto1 (gdb/lldb-debug)",
             "type": "cppvsdbg",
             "request": "launch",
             "program": "${workspaceFolder}/proto1/proto1/proto1",
