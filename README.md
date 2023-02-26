@@ -6,6 +6,11 @@ Presentation and links
 
 see : https://docs.google.com/presentation/d/1YOBf4iuNcZKgCnOEpWVkoMfEHL0yWTOpm8IMhf159i4/edit?usp=sharing
 
+### Status
+
+![example event parameter](https://github.com/Klaim/megastructures-prototypes/actions/workflows/builds-and-tests.yml/badge.svg?event=push)
+
+
 ## Prototype 1 - Overview
 
 For this prototype the goal is to evaluate the C++-based techs/tools stack for the game by building a minimalistic roguelike game with the following elements being used for evaluation:
