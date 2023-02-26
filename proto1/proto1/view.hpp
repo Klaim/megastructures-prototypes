@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include <proto1-model/core.hpp>
+#include <proto1-model/actionturn.hpp>
 
 namespace proto1::view
 {

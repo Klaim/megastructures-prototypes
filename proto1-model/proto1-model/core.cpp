@@ -54,6 +54,29 @@ namespace proto1::model
         return next_id++;
     }
 
+    bool World::is_controlled_by_player(const Body& body) const
+    {
+        if(not body.controlling_actor_id.has_value())
+            return false;
+
+        auto actor_it = actors.find(body.controlling_actor_id.value());
+        if(actor_it == actors.end())
+            return false;
+            
+        return actor_it->second.is_player(); 
+    }
+
+    bool World::has_player_bodies() const     
+    {
+        auto bodies = entities_compoments.view<Body>();
+
+        return not bodies.empty()
+            && std::ranges::any_of(bodies.each(), [&](auto&& data){
+                const auto& [entity, body] = data;
+                return is_controlled_by_player(body);
+            });
+    }
+
     Area create_test_area(Size size, int wall_count)
     {
         Area area{
