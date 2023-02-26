@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "buildfile": "makefile",
+        "build2file": "makefile",
+        "*.manifest": "makefile",
+        "*.build2": "makefile",
+        "*.build": "makefile",
+        "*.mxx": "cpp",
+        "type_traits": "cpp"
+    }
+}
