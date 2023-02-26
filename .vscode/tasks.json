@@ -1,0 +1,22 @@
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "build all in debug with symlinks",
+            "command": "b",
+            "args": [ "{update test}" ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Uses `b` and not `bdep update`"
+        }
+    ],
+    "version": "2.0.0"
+}
