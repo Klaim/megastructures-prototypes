@@ -6,6 +6,13 @@
         "*.build2": "makefile",
         "*.build": "makefile",
         "*.mxx": "cpp",
-        "type_traits": "cpp"
+        "type_traits": "cpp",
+        "optional": "cpp",
+        "array": "cpp",
+        "ranges": "cpp",
+        "span": "cpp",
+        "vector": "cpp",
+        "xstring": "cpp",
+        "xutility": "cpp"
     }
 }

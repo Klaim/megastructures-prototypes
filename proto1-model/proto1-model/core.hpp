@@ -71,16 +71,20 @@ namespace proto1::model
 
         Actor::Kind kind = Kind::not_player;
 
+        bool is_player() const { return kind == Kind::player; }
+
     };
 
     struct Body
     {
         Position position;
         std::optional<ActorID> controlling_actor_id;
+
+        bool can_act() const { return controlling_actor_id.has_value(); }
     };
 
 
-    struct Area
+    struct PROTO1_MODEL_SYMEXPORT Area
     {
         Size size;
         std::vector<Position> walls;
@@ -89,12 +93,14 @@ namespace proto1::model
 
     };
 
-    struct World
+    struct PROTO1_MODEL_SYMEXPORT World
     {
         Area area;
         flat_map<ActorID, Actor> actors;
         entt::registry entities_compoments;
-   
+
+        bool has_player_bodies() const;
+        bool is_controlled_by_player(const Body& body) const;   
     };
 
 
@@ -103,13 +109,6 @@ namespace proto1::model
 
     PROTO1_MODEL_SYMEXPORT 
     World create_test_world();
-
-    struct Event{};
-
-    struct TurnInfo
-    {
-        std::vector<Event> events;
-    };
 
 
 }
