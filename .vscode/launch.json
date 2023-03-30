@@ -30,5 +30,31 @@
             "preLaunchTask": "${defaultBuildTask}",
             
         },
+        {
+            "name": "proto1-model/tests (vs-debug)",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/proto1-model/tests/basics/driver",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "console": "externalTerminal",
+            "preLaunchTask": "build without testing",
+            
+        },
+        {
+            "name": "proto1-model/tests (gdb/lldb-debug)",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/proto1-model/tests/basics/driver",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "console": "externalTerminal",
+            "preLaunchTask": "build without testing",
+            
+        },
     ]
 }
