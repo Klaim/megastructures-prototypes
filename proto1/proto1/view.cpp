@@ -54,7 +54,7 @@ namespace proto1::view
 
             const auto &player_desc = get_description(EntityKind::player);
             const auto &npc_desc = get_description(EntityKind::npc);
-            auto bodies_view = world.entities_compoments.view<const model::Body>();
+            auto bodies_view = world.entities.view<const model::Body>();
             for (const auto &[entity_id, body] : bodies_view.each())
             {
                 const bool is_player = world.is_controlled_by_player(body);

@@ -57,6 +57,13 @@ namespace proto1::model
         int highest_y() const { return position.y + size.height; }
     };
 
+    
+    struct Event{}; // TODO: make this type-erasing wrapper?
+    
+    struct Action // TODO: make this a type-erasing wrapper (ideally using only values)
+    {
+    };
+
     using ActorID = int;
 
     struct Actor
@@ -78,9 +85,9 @@ namespace proto1::model
     struct Body
     {
         Position position;
-        std::optional<ActorID> controlling_actor_id;
+        std::optional<ActorID> actor_id;
 
-        bool can_act() const { return controlling_actor_id.has_value(); }
+        bool can_act() const { return actor_id.has_value(); }
     };
 
 
@@ -97,10 +104,10 @@ namespace proto1::model
     {
         Area area;
         flat_map<ActorID, Actor> actors;
-        entt::registry entities_compoments;
+        entt::registry entities;
 
         bool has_player_bodies() const;
-        bool is_controlled_by_player(const Body& body) const;   
+        bool is_controlled_by_player(const Body& body) const;
     };
 
 

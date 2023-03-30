@@ -56,10 +56,10 @@ namespace proto1::model
 
     bool World::is_controlled_by_player(const Body& body) const
     {
-        if(not body.controlling_actor_id.has_value())
+        if(not body.actor_id.has_value())
             return false;
 
-        auto actor_it = actors.find(body.controlling_actor_id.value());
+        auto actor_it = actors.find(body.actor_id.value());
         if(actor_it == actors.end())
             return false;
             
@@ -68,7 +68,7 @@ namespace proto1::model
 
     bool World::has_player_bodies() const     
     {
-        auto bodies = entities_compoments.view<Body>();
+        auto bodies = entities.view<Body>();
 
         return not bodies.empty()
             && std::ranges::any_of(bodies.each(), [&](auto&& data){
@@ -100,21 +100,21 @@ namespace proto1::model
             .area = create_test_area({ 19, 19 }, 10),
         };
 
-        const auto player_id = world.entities_compoments.create();
+        const auto player_id = world.entities.create();
         const auto player_actor_id = Actor::new_id();
         world.actors.insert({ player_actor_id, Actor{ .kind = Actor::Kind::player }});
-        world.entities_compoments.emplace<Body>(player_id, Body{ 
+        world.entities.emplace<Body>(player_id, Body{ 
             .position = random_free_position(world.area),
-            .controlling_actor_id = player_actor_id,
+            .actor_id = player_actor_id,
         });
 
 
-        const auto npc_id = world.entities_compoments.create();
+        const auto npc_id = world.entities.create();
         const auto npc_actor_id = Actor::new_id();
         world.actors.insert({ npc_actor_id, Actor{} });
-        world.entities_compoments.emplace<Body>(npc_id, Body{ 
+        world.entities.emplace<Body>(npc_id, Body{ 
             .position = random_free_position(world.area),
-            .controlling_actor_id = npc_actor_id,
+            .actor_id = npc_actor_id,
         });
 
         return world;

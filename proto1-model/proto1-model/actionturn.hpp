@@ -1,39 +1,76 @@
 #pragma once
 
+#include <optional>
+#include <vector>
+
+#include <tl/generator.hpp>
+
+#include <proto1-model/export.hpp>
 #include <proto1-model/core.hpp>
+
 
 namespace proto1::model
 {
 
-    struct Event{}; // TODO: make this type-erasing wrapper?
-
     struct ActionResults
     {
-        World world_after_events;
         std::vector<Event> events;
     };
 
-    struct Action // TODO: make this a type-erasing wrapper (ideally using only values)
+
+    namespace actions
     {
-        auto execute(World& world, Body& body_acting, Actor actor_deciding) -> ActionResults
-        {
-            // FIXME: 
-            return {};
-        }
-    };
+        using Wait = Action;
+    }
+
+
+    inline
+    auto execute(Action& action, World& world, Body& body_acting, Actor actor_deciding)
+        -> ActionResults
+    {
+        // FIXME: 
+        return {};
+    }
+    
+    inline
+    auto decide_next_action(Actor& actor, Body& body)
+        -> Action
+    { 
+        // FIXME:
+        return actions::Wait{};
+    }
 
     struct TurnInfo
     {
         int current_turn = 0;
-        World world;
         std::vector<Event> events;
     };
 
-
-    class TurnSolver
+    class PROTO1_MODEL_SYMEXPORT TurnSolver
     {
     public:
+        
+        explicit TurnSolver(World& world);
+        ~TurnSolver();
 
+        TurnSolver(TurnSolver&& other);
+        TurnSolver& operator=(TurnSolver&& other);
+        TurnSolver(const TurnSolver&) = delete;
+        TurnSolver& operator=(const TurnSolver&) = delete;
+
+        auto start_until_player_turn() -> TurnInfo;
+
+        auto play_action_until_next_turn(Action action) -> TurnInfo;
+
+    private:
+        using TurnSequence = tl::generator<TurnInfo>;
+
+        World& world;
+        std::optional<TurnSequence> turn_sequence;
+        decltype(turn_sequence->begin()) turn_iterator;
+        Action next_player_action;
+
+        auto start_sequence() -> TurnSequence;
     };
 
 

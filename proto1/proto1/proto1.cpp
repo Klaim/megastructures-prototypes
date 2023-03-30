@@ -55,6 +55,9 @@ int main(int argc, char** args)
 
 
     auto world = model::create_test_world();
+    model::TurnSolver turn_solver{ world };
+    turn_solver.start_until_player_turn();
+
     view::View world_view{ world, std::move(view_config) };
 
     sf::Clock deltaClock;
@@ -70,8 +73,13 @@ int main(int argc, char** args)
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+        
         // update input
-
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        {
+            auto turns_info = turn_solver.play_action_until_next_turn(model::actions::Wait{});
+            world_view.update(turns_info);
+        }
 
         // update ui
         ImGui::SFML::Update(window, deltaClock.restart());
