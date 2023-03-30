@@ -2,9 +2,10 @@
 
 #include <optional>
 #include <vector>
+#include <type_traits>
+#include <memory>
 
 #include <tl/generator.hpp>
-#include <boost-te.hpp>
 
 #include <proto1-model/export.hpp>
 #include <proto1-model/core.hpp>
@@ -12,9 +13,9 @@
 
 namespace proto1::model
 {
-    
+
     struct Event{}; // TODO: make this type-erasing wrapper?
-    
+
     struct ActionResults
     {
         std::vector<Event> events;
@@ -27,17 +28,73 @@ namespace proto1::model
         Actor& actor_deciding;
     };
 
-    struct Action
+    template<class T>
+    concept Action = requires(T&& thing, ActionContext context) // TODO: add value semantics requirements
     {
+        { thing.execute(context) } -> std::convertible_to<ActionResults>;
+    };
+
+    struct AnyAction
+    {
+        AnyAction() = default;
+        
+        AnyAction(const AnyAction& other)
+            : storage(other.storage->clone())
+        {
+        }
+
+        AnyAction& operator=(const AnyAction& other)
+        {
+            storage = other.storage->clone();
+            return *this;
+        }
+
+        AnyAction(AnyAction&&) noexcept = default;
+        AnyAction& operator=(AnyAction&&) noexcept = default;
+
+        template<Action T>
+        AnyAction(T&& impl)
+            requires(not std::is_same_v<AnyAction, std::remove_cvref_t<T>>)
+            : storage(std::make_unique<Impl<T>>(std::forward<T>(impl)))
+        {
+
+        }
+        
+
         ActionResults execute(ActionContext action_context) const
         {
-            return boost::te::call<ActionResults>(
-                [](auto const &self, ActionContext action_context) { 
-                    return self.execute(action_context); 
-                }
-                , *this, action_context);
+            return storage->execute(action_context);
         }
+    
+    private:
+        struct Interface
+        {
+            virtual ActionResults execute(ActionContext action_context) const = 0;
+            virtual std::unique_ptr<Interface> clone() const = 0;
+        };
+
+        template<Action T>
+        struct Impl : Interface
+        {
+            T impl;
+
+            explicit Impl(T value) : impl(std::move(value)) {}
+
+            ActionResults execute(ActionContext action_context) const override
+            {
+                return impl.execute(action_context);
+            }
+
+            std::unique_ptr<Interface> clone() const override
+            {
+                return std::make_unique<Impl<T>>(impl);
+            }
+        };
+
+        std::unique_ptr<Interface> storage;
+
     };
+
 
     namespace actions
     {
@@ -50,20 +107,17 @@ namespace proto1::model
         };
     }
 
-
-    using AnyAction = boost::te::poly<Action>;
-
     inline
     auto execute(const AnyAction& action, ActionContext action_context)
         -> ActionResults
     {
         return action.execute(action_context);
     }
-    
+
     inline
     auto decide_next_action(ActionContext action_context)
         -> AnyAction
-    { 
+    {
         // FIXME:
         return actions::Wait{};
     }
@@ -77,7 +131,7 @@ namespace proto1::model
     class PROTO1_MODEL_SYMEXPORT TurnSolver
     {
     public:
-        
+
         explicit TurnSolver(World& world);
         ~TurnSolver();
 

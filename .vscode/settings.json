@@ -88,6 +88,17 @@
         "bitset": "cpp",
         "complex": "cpp",
         "fstream": "cpp",
-        "typeindex": "cpp"
+        "typeindex": "cpp",
+        "any": "cpp",
+        "condition_variable": "cpp",
+        "csignal": "cpp",
+        "cwctype": "cpp",
+        "numeric": "cpp",
+        "queue": "cpp",
+        "shared_mutex": "cpp",
+        "source_location": "cpp",
+        "stack": "cpp",
+        "strstream": "cpp",
+        "valarray": "cpp"
     }
 }
