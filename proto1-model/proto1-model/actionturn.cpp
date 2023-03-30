@@ -7,7 +7,6 @@ namespace proto1::model
     {}
 
     TurnSolver::~TurnSolver() = default;
-    TurnSolver::TurnSolver(TurnSolver&& other) = default;
 
     auto TurnSolver::start_until_player_turn() -> TurnInfo
     {
@@ -16,7 +15,7 @@ namespace proto1::model
         return *turn_iterator;
     }
 
-    auto TurnSolver::play_action_until_next_turn(Action action) -> TurnInfo
+    auto TurnSolver::play_action_until_next_turn(AnyAction action) -> TurnInfo
     {
         if(not turn_sequence.has_value())
             throw std::runtime_error("TurnSolver::play_action_until_next_turn called before TurnSolver::start_until_player_turn");
@@ -45,19 +44,20 @@ namespace proto1::model
 
                 auto actor = world.actors[body.actor_id.value()];
 
-                Action next_action;
+                AnyAction next_action{ actions::Wait{} };
                 if(actor.is_player())
                 {
                     co_yield turn_info;
                     turn_info = { .current_turn = current_turn };
-                    next_action = next_player_action;
+                    assert(next_player_action.has_value());
+                    next_action = *next_player_action;
                 }
                 else
                 {
-                    next_action = decide_next_action(actor, body);
+                    next_action = decide_next_action({ world, body, actor });
                 }
 
-                ActionResults action_results = execute(next_action, world, body, actor);
+                ActionResults action_results = execute(next_action, { world, body, actor });
                 turn_info.events.append_range(action_results.events);
 
             }

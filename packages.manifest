@@ -4,3 +4,5 @@ location: proto1/
 location: proto1-model/
 :
 location: stdx/
+:
+location: te/

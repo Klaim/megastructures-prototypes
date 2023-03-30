@@ -1,8 +1,10 @@
 : 1
-name: proto1-model
+name: te
 version: 0.1.0-a.0.z
+type: lib,binless
+language: c++
 project: megastructures-prototypes
-summary: proto1-model C++ library
+summary: te C++ library
 license: other: proprietary ; Not free/open source.
 description-file: README.md
 url: https://example.org/megastructures-prototypes
@@ -10,9 +12,4 @@ email: mjklaim@gmail.com
 #build-error-email: mjklaim@gmail.com
 depends: * build2 >= 0.15.0
 depends: * bpkg >= 0.15.0
-
-depends: doctest ^2.4.9
-depends: entt ^3.11.1
-depends: libboost-container ^1.78.0
-depends: tl-generator ^0.4.0
-depends: te
+#depends: libhello ^1.0.0

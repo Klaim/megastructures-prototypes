@@ -57,13 +57,6 @@ namespace proto1::model
         int highest_y() const { return position.y + size.height; }
     };
 
-    
-    struct Event{}; // TODO: make this type-erasing wrapper?
-    
-    struct Action // TODO: make this a type-erasing wrapper (ideally using only values)
-    {
-    };
-
     using ActorID = int;
 
     struct Actor
