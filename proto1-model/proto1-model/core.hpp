@@ -19,14 +19,27 @@ namespace proto1::model
         int x = 0;
         int y = 0;
 
-        friend Vector2 operator+(const Vector2& left, const Vector2& right)
+        friend Vector2 operator+(const Vector2& left, const Vector2& right) noexcept
         {
             return { left.x + right.x, left.y + right.y };
         }
 
         bool operator==(const Vector2&) const = default;
+    
+        PROTO1_MODEL_SYMEXPORT static const Vector2 ZERO;
+        PROTO1_MODEL_SYMEXPORT static const Vector2 UP;
+        PROTO1_MODEL_SYMEXPORT static const Vector2 DOWN;
+        PROTO1_MODEL_SYMEXPORT static const Vector2 LEFT;
+        PROTO1_MODEL_SYMEXPORT static const Vector2 RIGHT;
+
+        Vector2 left() const { return *this + LEFT; }
+        Vector2 right() const { return *this + RIGHT; }
+        Vector2 up() const { return *this + UP; }
+        Vector2 down() const { return *this + DOWN; }
+
     };
 
+    
     using Position = Vector2;
 
     struct Size

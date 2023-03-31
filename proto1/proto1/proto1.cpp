@@ -11,6 +11,7 @@
 #include <imgui/backends/imgui-SFML.h>
 
 #include <proto1-model/core.hpp>
+#include <proto1-model/movement.hpp>
 
 #include <proto1/view.hpp>
 #include <proto1/ui.hpp>
@@ -126,6 +127,11 @@ namespace proto1
         bool is_key_down_last_update = false;
         bool has_key_just_changed = false;
     };
+
+    auto key_state_tracker_pair(sf::Keyboard::Key key)
+    {
+        return std::make_pair(key, KeyStateTracker{ key });
+    }
 }
 
 int main(int argc, char** args)
@@ -160,7 +166,11 @@ int main(int argc, char** args)
     view::View world_view{ world, std::move(view_config) };
 
     boost::unordered::unordered_flat_map<sf::Keyboard::Key, KeyStateTracker> keys_state{ 
-        { sf::Keyboard::Space, KeyStateTracker{ sf::Keyboard::Space }}
+        key_state_tracker_pair(sf::Keyboard::Space),
+        key_state_tracker_pair(sf::Keyboard::Left),
+        key_state_tracker_pair(sf::Keyboard::Right),
+        key_state_tracker_pair(sf::Keyboard::Up),
+        key_state_tracker_pair(sf::Keyboard::Down),
     };
 
     sf::Clock deltaClock;
@@ -183,9 +193,32 @@ int main(int argc, char** args)
             tracker.update();
         }
 
+        std::optional<model::AnyAction> maybe_player_action; 
+
         if (keys_state[sf::Keyboard::Space].get_state() == KeyState::just_down)
         {
-            auto turns_info = turn_solver.play_action_until_next_turn(model::actions::Wait{});
+            maybe_player_action = model::actions::Wait{};
+        }
+        if (keys_state[sf::Keyboard::Left].get_state() == KeyState::just_down)
+        {
+            maybe_player_action = model::actions::Move{ model::Vector2::LEFT };
+        }
+        if (keys_state[sf::Keyboard::Right].get_state() == KeyState::just_down)
+        {
+            maybe_player_action = model::actions::Move{ model::Vector2::RIGHT };
+        }
+        if (keys_state[sf::Keyboard::Up].get_state() == KeyState::just_down)
+        {
+            maybe_player_action = model::actions::Move{ model::Vector2::UP };
+        }
+        if (keys_state[sf::Keyboard::Down].get_state() == KeyState::just_down)
+        {
+            maybe_player_action = model::actions::Move{ model::Vector2::DOWN };
+        }
+
+        if(maybe_player_action)
+        {
+            auto turns_info = turn_solver.play_action_until_next_turn(*maybe_player_action);
             world_view.update(turns_info);
         }
 
