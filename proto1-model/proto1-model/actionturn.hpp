@@ -79,6 +79,8 @@ namespace proto1::model
             virtual ActionResults execute(ActionContext action_context) const = 0;
             virtual std::unique_ptr<Interface> clone() const = 0;
             virtual std::type_index type_id() const = 0;
+
+            virtual ~Interface() = default;
         };
 
         template<Action T>
