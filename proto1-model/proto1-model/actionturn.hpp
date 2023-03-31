@@ -83,6 +83,10 @@ namespace proto1::model
             virtual ~Interface() = default;
         };
 
+        // TODO:
+        // consider this https://godbolt.org/z/5ajqT584v
+        // OR BETTER: https://www.fluentcpp.com/2021/01/29/inheritance-without-pointers/
+
         template<Action T>
         struct Impl : Interface
         {
