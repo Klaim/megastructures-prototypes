@@ -1,3 +1,0 @@
-# te
-
-C++ library
