@@ -4,8 +4,10 @@
 #include <vector>
 #include <type_traits>
 #include <memory>
+#include <typeindex>
 
 #include <tl/generator.hpp>
+#include <fmt/core.h>
 
 #include <proto1-model/export.hpp>
 #include <proto1-model/core.hpp>
@@ -65,12 +67,18 @@ namespace proto1::model
         {
             return storage->execute(action_context);
         }
+
+        std::type_index type_id() const
+        {
+            return storage->type_id();
+        }
     
     private:
         struct Interface
         {
             virtual ActionResults execute(ActionContext action_context) const = 0;
             virtual std::unique_ptr<Interface> clone() const = 0;
+            virtual std::type_index type_id() const = 0;
         };
 
         template<Action T>
@@ -88,6 +96,11 @@ namespace proto1::model
             std::unique_ptr<Interface> clone() const override
             {
                 return std::make_unique<Impl<T>>(impl);
+            }
+
+            std::type_index type_id() const override
+            {
+                return typeid(impl);
             }
         };
 
@@ -111,6 +124,7 @@ namespace proto1::model
     auto execute(const AnyAction& action, ActionContext action_context)
         -> ActionResults
     {
+        fmt::print("\n{} -> {}", action_context.actor_deciding.is_player() ? "Player" : "NPC", action.type_id().name());
         return action.execute(action_context);
     }
 

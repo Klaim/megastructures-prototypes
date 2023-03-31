@@ -4,6 +4,7 @@
 #include <array>
 
 #include <boost/predef/os.h>
+#include <boost/unordered/unordered_flat_map.hpp>
 #include <fmt/core.h>
 
 #include <imgui/imgui.h>
@@ -27,6 +28,104 @@ namespace proto1
         return BOOST_OS_WINDOWS or BOOST_OS_UNIX or BOOST_OS_MACOS;
     }
 
+    enum class KeyState
+    {
+        up,
+        down,
+        just_up,
+        just_down
+    };
+
+    inline std::string to_string(KeyState key_state)
+    {
+        switch (key_state)
+        {
+        case KeyState::up:
+            return "up";
+        case KeyState::just_up:
+            return "just_up";
+        case KeyState::down:
+            return "down";
+        case KeyState::just_down:
+            return "just_down";
+        default:
+            return "unknown";
+        }
+    }
+
+    class KeyStateTracker
+    {
+    public:
+        KeyStateTracker() = default;
+
+        explicit KeyStateTracker(sf::Keyboard::Key key_to_track)
+            : key(key_to_track)
+        {
+        }
+
+        KeyState get_state()
+        {
+            if (is_key_down_last_update && !has_key_just_changed)
+            {
+                return KeyState::down;
+            }
+
+            if (is_key_down_last_update && has_key_just_changed)
+            {
+                return KeyState::just_down;
+            }
+
+            if (!is_key_down_last_update && !has_key_just_changed)
+            {
+                return KeyState::up;
+            }
+
+            if (!is_key_down_last_update && has_key_just_changed)
+            {
+                return KeyState::just_up;
+            }
+
+            std::unreachable();
+        }
+
+        void update()
+        {
+            if(key == sf::Keyboard::Unknown)
+                return;
+
+            const bool is_key_down_now = sf::Keyboard::isKeyPressed(key);
+
+            if (is_key_down_now)
+            {
+                if (is_key_down_last_update)
+                {
+                    has_key_just_changed = false;
+                }
+                else
+                {
+                    has_key_just_changed = true;
+                }
+            }
+            else
+            {
+                if (is_key_down_last_update)
+                {
+                    has_key_just_changed = true;
+                }
+                else
+                {
+                    has_key_just_changed = false;
+                }
+            }
+
+            is_key_down_last_update = is_key_down_now;
+        }
+
+    private:
+        sf::Keyboard::Key key = sf::Keyboard::Unknown;
+        bool is_key_down_last_update = false;
+        bool has_key_just_changed = false;
+    };
 }
 
 int main(int argc, char** args)
@@ -60,6 +159,10 @@ int main(int argc, char** args)
 
     view::View world_view{ world, std::move(view_config) };
 
+    boost::unordered::unordered_flat_map<sf::Keyboard::Key, KeyStateTracker> keys_state{ 
+        { sf::Keyboard::Space, KeyStateTracker{ sf::Keyboard::Space }}
+    };
+
     sf::Clock deltaClock;
     // Start the game loop
     while (window.isOpen())
@@ -75,7 +178,12 @@ int main(int argc, char** args)
         }
         
         // update input
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        for (auto&& [key, tracker] : keys_state)
+        {
+            tracker.update();
+        }
+
+        if (keys_state[sf::Keyboard::Space].get_state() == KeyState::just_down)
         {
             auto turns_info = turn_solver.play_action_until_next_turn(model::actions::Wait{});
             world_view.update(turns_info);

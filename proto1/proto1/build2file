@@ -1,8 +1,11 @@
 libs =
-import libs += fmt%lib{fmt} libboost-predef%lib{boost_predef} magic_enum%lib{magic_enum}
-import libs += proto1-model%lib{proto1-model}
-import libs += libsfml-graphics%lib{sfml-graphics}
-import libs += libimgui-framework-sfml%lib{imgui-framework-sfml}
+import libs += fmt%lib{fmt} \
+	libboost-predef%lib{boost_predef} \
+	libboost-unordered%lib{boost_unordered} \
+	magic_enum%lib{magic_enum} \
+	proto1-model%lib{proto1-model} \
+	libsfml-graphics%lib{sfml-graphics} \
+	libimgui-framework-sfml%lib{imgui-framework-sfml}
 
 exe{proto1}: {hxx ixx txx cxx}{**} $libs # testscript
 exe{proto1}: data/file{**}

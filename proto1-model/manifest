@@ -15,3 +15,4 @@ depends: doctest ^2.4.9
 depends: entt ^3.11.1
 depends: libboost-container ^1.78.0
 depends: tl-generator ^0.4.0
+depends: fmt ^9.1.0
