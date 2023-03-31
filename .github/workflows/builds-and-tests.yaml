@@ -52,10 +52,17 @@ jobs:
       - run: echo "🍏 This job's status is ${{ job.status }}."
 
       - name: Install recent LLVM and Clang
-        if: matrix.toolchain == 'clang'
+        if: matrix.toolchain == 'clang' 
         uses: KyleMayes/install-llvm-action@v1
         with:
-          version: "15"
+          version: "16"
+
+      - name: Install recent GCC
+        if: matrix.toolchain == 'gcc'
+        uses: egor-tensin/setup-gcc@v1
+        with:
+          version: "12"
+          platform: x64
 
       - name: Info about clang
         if: matrix.toolchain == 'clang'
