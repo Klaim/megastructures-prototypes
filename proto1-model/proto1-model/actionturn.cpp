@@ -1,5 +1,7 @@
 #include <proto1-model/actionturn.hpp>
 
+#include <stdx/utility_ranges.hpp>
+
 namespace proto1::model
 {
     TurnSolver::TurnSolver(World& world)
@@ -58,7 +60,7 @@ namespace proto1::model
                 }
 
                 ActionResults action_results = execute(next_action, { world, body, actor });
-                turn_info.events.append_range(action_results.events);
+                turn_info.events = stdx::append_ranges(turn_info.events, action_results.events);
 
             }
         }
