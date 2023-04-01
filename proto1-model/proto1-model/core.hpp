@@ -19,14 +19,27 @@ namespace proto1::model
         int x = 0;
         int y = 0;
 
-        friend Vector2 operator+(const Vector2& left, const Vector2& right)
+        friend Vector2 operator+(const Vector2& left, const Vector2& right) noexcept
         {
             return { left.x + right.x, left.y + right.y };
         }
 
         bool operator==(const Vector2&) const = default;
+    
+        PROTO1_MODEL_SYMEXPORT static const Vector2 ZERO;
+        PROTO1_MODEL_SYMEXPORT static const Vector2 UP;
+        PROTO1_MODEL_SYMEXPORT static const Vector2 DOWN;
+        PROTO1_MODEL_SYMEXPORT static const Vector2 LEFT;
+        PROTO1_MODEL_SYMEXPORT static const Vector2 RIGHT;
+
+        Vector2 left() const { return *this + LEFT; }
+        Vector2 right() const { return *this + RIGHT; }
+        Vector2 up() const { return *this + UP; }
+        Vector2 down() const { return *this + DOWN; }
+
     };
 
+    
     using Position = Vector2;
 
     struct Size
@@ -71,16 +84,20 @@ namespace proto1::model
 
         Actor::Kind kind = Kind::not_player;
 
+        bool is_player() const { return kind == Kind::player; }
+
     };
 
     struct Body
     {
         Position position;
-        std::optional<ActorID> controlling_actor_id;
+        std::optional<ActorID> actor_id;
+
+        bool can_act() const { return actor_id.has_value(); }
     };
 
 
-    struct Area
+    struct PROTO1_MODEL_SYMEXPORT Area
     {
         Size size;
         std::vector<Position> walls;
@@ -89,12 +106,14 @@ namespace proto1::model
 
     };
 
-    struct World
+    struct PROTO1_MODEL_SYMEXPORT World
     {
         Area area;
         flat_map<ActorID, Actor> actors;
-        entt::registry entities_compoments;
-   
+        entt::registry entities;
+
+        bool has_player_bodies() const;
+        bool is_controlled_by_player(const Body& body) const;
     };
 
 
@@ -103,13 +122,6 @@ namespace proto1::model
 
     PROTO1_MODEL_SYMEXPORT 
     World create_test_world();
-
-    struct Event{};
-
-    struct TurnInfo
-    {
-        std::vector<Event> events;
-    };
 
 
 }

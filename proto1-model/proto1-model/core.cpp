@@ -6,6 +6,12 @@
 
 namespace proto1::model
 {
+    const Vector2 Vector2::ZERO = Vector2{};
+    const Vector2 Vector2::UP = Vector2{0, -1};
+    const Vector2 Vector2::DOWN = Vector2{0, 1};
+    const Vector2 Vector2::LEFT = Vector2{-1, 0};
+    const Vector2 Vector2::RIGHT = Vector2{1, 0};
+
     namespace 
     {
         
@@ -54,6 +60,29 @@ namespace proto1::model
         return next_id++;
     }
 
+    bool World::is_controlled_by_player(const Body& body) const
+    {
+        if(not body.actor_id.has_value())
+            return false;
+
+        auto actor_it = actors.find(body.actor_id.value());
+        if(actor_it == actors.end())
+            return false;
+            
+        return actor_it->second.is_player(); 
+    }
+
+    bool World::has_player_bodies() const     
+    {
+        auto bodies = entities.view<Body>();
+
+        return not bodies.empty()
+            && std::ranges::any_of(bodies.each(), [&](auto&& data){
+                const auto& [entity, body] = data;
+                return is_controlled_by_player(body);
+            });
+    }
+
     Area create_test_area(Size size, int wall_count)
     {
         Area area{
@@ -77,21 +106,21 @@ namespace proto1::model
             .area = create_test_area({ 19, 19 }, 10),
         };
 
-        const auto player_id = world.entities_compoments.create();
+        const auto player_id = world.entities.create();
         const auto player_actor_id = Actor::new_id();
         world.actors.insert({ player_actor_id, Actor{ .kind = Actor::Kind::player }});
-        world.entities_compoments.emplace<Body>(player_id, Body{ 
+        world.entities.emplace<Body>(player_id, Body{ 
             .position = random_free_position(world.area),
-            .controlling_actor_id = player_actor_id,
+            .actor_id = player_actor_id,
         });
 
 
-        const auto npc_id = world.entities_compoments.create();
+        const auto npc_id = world.entities.create();
         const auto npc_actor_id = Actor::new_id();
         world.actors.insert({ npc_actor_id, Actor{} });
-        world.entities_compoments.emplace<Body>(npc_id, Body{ 
+        world.entities.emplace<Body>(npc_id, Body{ 
             .position = random_free_position(world.area),
-            .controlling_actor_id = npc_actor_id,
+            .actor_id = npc_actor_id,
         });
 
         return world;

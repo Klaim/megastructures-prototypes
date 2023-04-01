@@ -4,12 +4,14 @@
 #include <array>
 
 #include <boost/predef/os.h>
+#include <boost/unordered/unordered_flat_map.hpp>
 #include <fmt/core.h>
 
 #include <imgui/imgui.h>
 #include <imgui/backends/imgui-SFML.h>
 
 #include <proto1-model/core.hpp>
+#include <proto1-model/movement.hpp>
 
 #include <proto1/view.hpp>
 #include <proto1/ui.hpp>
@@ -27,6 +29,109 @@ namespace proto1
         return BOOST_OS_WINDOWS or BOOST_OS_UNIX or BOOST_OS_MACOS;
     }
 
+    enum class KeyState
+    {
+        up,
+        down,
+        just_up,
+        just_down
+    };
+
+    inline std::string to_string(KeyState key_state)
+    {
+        switch (key_state)
+        {
+        case KeyState::up:
+            return "up";
+        case KeyState::just_up:
+            return "just_up";
+        case KeyState::down:
+            return "down";
+        case KeyState::just_down:
+            return "just_down";
+        default:
+            return "unknown";
+        }
+    }
+
+    class KeyStateTracker
+    {
+    public:
+        KeyStateTracker() = default;
+
+        explicit KeyStateTracker(sf::Keyboard::Key key_to_track)
+            : key(key_to_track)
+        {
+        }
+
+        KeyState get_state()
+        {
+            if (is_key_down_last_update && !has_key_just_changed)
+            {
+                return KeyState::down;
+            }
+
+            if (is_key_down_last_update && has_key_just_changed)
+            {
+                return KeyState::just_down;
+            }
+
+            if (!is_key_down_last_update && !has_key_just_changed)
+            {
+                return KeyState::up;
+            }
+
+            if (!is_key_down_last_update && has_key_just_changed)
+            {
+                return KeyState::just_up;
+            }
+
+            std::unreachable();
+        }
+
+        void update()
+        {
+            if(key == sf::Keyboard::Unknown)
+                return;
+
+            const bool is_key_down_now = sf::Keyboard::isKeyPressed(key);
+
+            if (is_key_down_now)
+            {
+                if (is_key_down_last_update)
+                {
+                    has_key_just_changed = false;
+                }
+                else
+                {
+                    has_key_just_changed = true;
+                }
+            }
+            else
+            {
+                if (is_key_down_last_update)
+                {
+                    has_key_just_changed = true;
+                }
+                else
+                {
+                    has_key_just_changed = false;
+                }
+            }
+
+            is_key_down_last_update = is_key_down_now;
+        }
+
+    private:
+        sf::Keyboard::Key key = sf::Keyboard::Unknown;
+        bool is_key_down_last_update = false;
+        bool has_key_just_changed = false;
+    };
+
+    auto key_state_tracker_pair(sf::Keyboard::Key key)
+    {
+        return std::make_pair(key, KeyStateTracker{ key });
+    }
 }
 
 int main(int argc, char** args)
@@ -55,7 +160,18 @@ int main(int argc, char** args)
 
 
     auto world = model::create_test_world();
+    model::TurnSolver turn_solver{ world };
+    turn_solver.start_until_player_turn();
+
     view::View world_view{ world, std::move(view_config) };
+
+    boost::unordered::unordered_flat_map<sf::Keyboard::Key, KeyStateTracker> keys_state{ 
+        key_state_tracker_pair(sf::Keyboard::Space),
+        key_state_tracker_pair(sf::Keyboard::Left),
+        key_state_tracker_pair(sf::Keyboard::Right),
+        key_state_tracker_pair(sf::Keyboard::Up),
+        key_state_tracker_pair(sf::Keyboard::Down),
+    };
 
     sf::Clock deltaClock;
     // Start the game loop
@@ -70,8 +186,41 @@ int main(int argc, char** args)
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+        
         // update input
+        for (auto&& [key, tracker] : keys_state)
+        {
+            tracker.update();
+        }
 
+        std::optional<model::AnyAction> maybe_player_action; 
+
+        if (keys_state[sf::Keyboard::Space].get_state() == KeyState::just_down)
+        {
+            maybe_player_action = model::actions::Wait{};
+        }
+        if (keys_state[sf::Keyboard::Left].get_state() == KeyState::just_down)
+        {
+            maybe_player_action = model::actions::Move{ model::Vector2::LEFT };
+        }
+        if (keys_state[sf::Keyboard::Right].get_state() == KeyState::just_down)
+        {
+            maybe_player_action = model::actions::Move{ model::Vector2::RIGHT };
+        }
+        if (keys_state[sf::Keyboard::Up].get_state() == KeyState::just_down)
+        {
+            maybe_player_action = model::actions::Move{ model::Vector2::UP };
+        }
+        if (keys_state[sf::Keyboard::Down].get_state() == KeyState::just_down)
+        {
+            maybe_player_action = model::actions::Move{ model::Vector2::DOWN };
+        }
+
+        if(maybe_player_action)
+        {
+            auto turns_info = turn_solver.play_action_until_next_turn(*maybe_player_action);
+            world_view.update(turns_info);
+        }
 
         // update ui
         ImGui::SFML::Update(window, deltaClock.restart());
