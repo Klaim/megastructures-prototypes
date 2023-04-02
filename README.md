@@ -52,9 +52,9 @@ However if you still want to build the project yourself, here are some instructi
 
 You need to install:
 - a toolchain: Visual Studio C++/MSVC, LLVM/clang or gcc depending on your platform and choice:
-    - **clang must be v15.x** (or higher if you modify the build configs);
+    - **clang must be v16.x** (or higher if you modify the build configs);
     - **msvc must be the last available** version from Visual Studio 2022 (or preview)
-    - **gcc must be 11.2 or higher**
+    - **gcc must be 12.x or higher**
 - **on Windows** I recommend using `Git-Bash` (which is installed with `git`) to run the commands and scripts below;
 - [`build2`](https://build2.org) as buildsystem and dependency manager.
     If you are not familiar with `build2` I recommend to read at least the [toolchain introduction](https://build2.org/build2-toolchain/doc/build2-toolchain-intro.xhtml), however you don't need to read it to proceed with the following instructions - you might need to read it if you want to submit a PR.
