@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # This script should only be run if you need to re-create all the configurations from scratch.
 
 # This script should be run from the directory it is located in.
@@ -14,6 +16,8 @@ then
     echo "Deleting previous configurations, install, etc..."
     rm -rf ./build-*/ ./install/ .bdep/
 fi
+
+echo "COMMAND = |$command|"
 
 bdep init --empty
 
