@@ -1,0 +1,4 @@
+
+
+config.install.filter = include/@false lib/@false "share/doc/proto*/"@true share/@false
+
