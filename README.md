@@ -16,6 +16,7 @@ see : https://docs.google.com/presentation/d/1YOBf4iuNcZKgCnOEpWVkoMfEHL0yWTOpm8
 For this prototype the goal is to evaluate the C++-based techs/tools stack for the game by building a minimalistic roguelike game with the following elements being used for evaluation:
 - Bleeding-edge C++ (beyond C++ 23 where possible)
 - [`build2`](https://build2.org) as build-system and dependency manager
+    - WARNING: At this moment we need either `v0.16.0 alpha`, which is the stage version so use the stage version, but once released you can juste use `v0.16.0` or higher version.
 - View separate from model (`proto1` is the executable acting as a view, `proto1-model` is the model library)
 - Entity Component System setup on the model (using [`entt`](https://github.com/skypjack/entt) as implementation)
 - C++ coroutines to implement the action-turn logic (using `std::generator`)
