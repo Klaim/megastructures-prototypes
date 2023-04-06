@@ -55,6 +55,7 @@ namespace proto1::model
         }
 
     }
+
     
     ActorID Actor::new_id()
     {
@@ -64,7 +65,8 @@ namespace proto1::model
 
     bool Area::is_wall(const Position& at_position) const
     {
-        return std::ranges::find(walls, at_position) != walls.end();
+        return not is_position_inside(at_position, Rectangle{ Vector2::ZERO, size })
+            || std::ranges::find(walls, at_position) != walls.end();
     }
 
     bool World::is_free_position(const Position& position) const
