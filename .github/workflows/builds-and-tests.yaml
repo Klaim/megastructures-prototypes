@@ -8,12 +8,12 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
-        toolchain: [msvc, gcc, clang, clang12, gcc12]
+        toolchain: [msvc, gcc, clang, clang16, gcc12]
         exclude:
           - os: ubuntu-latest
             toolchain: msvc
           - os: ubuntu-latest # TODO: Remove this one once the clang with libc++ is fixed
-            toolchain: clang clang12
+            toolchain: clang clang16
           - os: macos-latest
             toolchain: msvc
           - os: macos-latest # TODO: Remove this one once the clang of the system is fixed
