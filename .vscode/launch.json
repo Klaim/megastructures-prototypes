@@ -15,11 +15,11 @@
             "environment": [],
             "console": "externalTerminal",
             "preLaunchTask": "${defaultBuildTask}",
-            
+
         },
         {
             "name": "proto1 (gdb/lldb-debug)",
-            "type": "cppvsdbg",
+            "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/proto1/proto1/proto1",
             "args": [],
@@ -28,7 +28,7 @@
             "environment": [],
             "console": "externalTerminal",
             "preLaunchTask": "${defaultBuildTask}",
-            
+
         },
         {
             "name": "proto1-model/tests (vs-debug)",
@@ -41,11 +41,11 @@
             "environment": [],
             "console": "externalTerminal",
             "preLaunchTask": "build without testing",
-            
+
         },
         {
             "name": "proto1-model/tests (gdb/lldb-debug)",
-            "type": "cppvsdbg",
+            "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/proto1-model/tests/basics/driver",
             "args": [],
@@ -54,7 +54,7 @@
             "environment": [],
             "console": "externalTerminal",
             "preLaunchTask": "build without testing",
-            
+
         },
     ]
 }
