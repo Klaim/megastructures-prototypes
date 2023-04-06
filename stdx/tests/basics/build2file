@@ -1,3 +1,3 @@
-import libs = stdx%lib{stdx}
+import libs = stdx%lib{stdx} doctest%lib{doctest}
 
-./ : exe{test_generator}: cxx{test_generator} $libs testscript{**}
+./ : exe{test_stdx}: cxx{**} $libs testscript{**}

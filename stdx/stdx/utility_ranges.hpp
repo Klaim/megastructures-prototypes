@@ -5,7 +5,7 @@
 namespace stdx
 {
     // Workaround gcc not implementing yet `std::<container>::append_range`
-    auto append_ranges(std::ranges::forward_range auto&& left, std::ranges::forward_range auto&& right)
+    decltype(auto) append_ranges(std::ranges::forward_range auto left, std::ranges::forward_range auto const& right)
     {
         if constexpr(requires(){ left.append_range(right); })
         {
@@ -13,7 +13,7 @@ namespace stdx
         }
         else
         {
-            left.insert(begin(right), end(right), end(left));
+            left.insert(end(left), begin(right), end(right));
         }
         return left;
     }

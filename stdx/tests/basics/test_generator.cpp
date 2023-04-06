@@ -1,4 +1,4 @@
-// // Sources: 
+// // Sources:
 // // - https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2022/p2502r2.pdf
 // // - https://godbolt.org/z/5hcaPcfvP
 
@@ -317,4 +317,3 @@
 //     member_coro m;
 //     assert(*m.f().begin() == 42);
 // }
-int main(){}
