@@ -4,6 +4,8 @@
 #include <functional>
 #include <algorithm>
 
+#include <proto1-model/actors.hpp>
+
 namespace proto1::model
 {
     const Vector2 Vector2::ZERO = Vector2{};
@@ -131,7 +133,7 @@ namespace proto1::model
 
         const auto npc_id = world.entities.create();
         const auto npc_actor_id = Actor::new_id();
-        world.actors.insert({ npc_actor_id, Actor{} });
+        world.actors.insert({ npc_actor_id, Actor{ .decide_next_action = actors::random_action } });
         world.entities.emplace<Body>(npc_id, Body{ 
             .position = random_free_position(world.area),
             .actor_id = npc_actor_id,

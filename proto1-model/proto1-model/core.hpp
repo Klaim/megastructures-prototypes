@@ -72,6 +72,9 @@ namespace proto1::model
 
     using ActorID = int;
 
+    class AnyAction;
+    class ActionContext;
+
     struct Actor
     {
         static ActorID new_id();
@@ -86,6 +89,7 @@ namespace proto1::model
 
         bool is_player() const { return kind == Kind::player; }
 
+        std::function<AnyAction (ActionContext)> decide_next_action;
     };
 
     struct Body

@@ -138,7 +138,9 @@ namespace proto1::model
     auto decide_next_action(ActionContext action_context)
         -> AnyAction
     {
-        // FIXME:
+        if (action_context.actor_deciding.decide_next_action)
+            return action_context.actor_deciding.decide_next_action(action_context);
+
         return actions::Wait{};
     }
 

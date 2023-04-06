@@ -99,6 +99,8 @@
         "source_location": "cpp",
         "stack": "cpp",
         "strstream": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "regex": "cpp",
+        "pointers": "cpp"
     }
 }
