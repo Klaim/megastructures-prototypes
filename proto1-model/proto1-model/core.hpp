@@ -114,6 +114,8 @@ namespace proto1::model
 
         bool has_player_bodies() const;
         bool is_controlled_by_player(const Body& body) const;
+
+        bool is_free_position(const Position& position) const;
     };
 
 

@@ -2,7 +2,7 @@
 
 #include <random>
 #include <functional>
-#include <ranges>
+#include <algorithm>
 
 namespace proto1::model
 {
@@ -58,6 +58,20 @@ namespace proto1::model
     {
         static ActorID next_id = 0;
         return next_id++;
+    }
+
+    bool Area::is_wall(const Position& at_position) const
+    {
+        return std::ranges::find(walls, at_position) != walls.end();
+    }
+
+    bool World::is_free_position(const Position& position) const
+    {
+        return not area.is_wall(position)
+            && std::ranges::none_of(entities.view<const Body>().each(), [&](auto&& data){
+                const auto& [entity_id, body] = data;
+               return body.position == position; 
+            });
     }
 
     bool World::is_controlled_by_player(const Body& body) const
