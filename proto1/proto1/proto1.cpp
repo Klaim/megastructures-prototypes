@@ -166,6 +166,7 @@ int main(int argc, char** args)
     view::View world_view{ world, std::move(view_config) };
 
     boost::unordered::unordered_flat_map<sf::Keyboard::Key, KeyStateTracker> keys_state{ 
+        key_state_tracker_pair(sf::Keyboard::Escape),
         key_state_tracker_pair(sf::Keyboard::Space),
         key_state_tracker_pair(sf::Keyboard::Left),
         key_state_tracker_pair(sf::Keyboard::Right),
@@ -191,6 +192,12 @@ int main(int argc, char** args)
         for (auto&& [key, tracker] : keys_state)
         {
             tracker.update();
+        }
+
+        if (keys_state[sf::Keyboard::Escape].get_state() == KeyState::just_down)
+        {
+            window.close();
+            break;
         }
 
         std::optional<model::AnyAction> maybe_player_action; 
