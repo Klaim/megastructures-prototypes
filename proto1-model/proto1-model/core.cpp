@@ -128,6 +128,18 @@ namespace proto1::model
         });
     }
 
+    class SpawnCharacter
+    {
+    public:
+        ActionResults execute(ActionContext context) const
+        {
+            create_new_character(context.world, context.actor_deciding);
+            return {};
+        }
+    };
+
+    static_assert(Action<SpawnCharacter>);
+
     World create_test_world()
     {
         World world
@@ -138,6 +150,12 @@ namespace proto1::model
         create_new_character(world, Actor{ .kind = Actor::Kind::player });
         create_new_character(world, Actor{ .decide_next_action = actors::DoRandomAction{} });
         create_new_character(world, Actor{ .decide_next_action = actors::WalkUntilYouReachAWall{} });
+
+        // auto actions = actors::default_random_actions();
+        // actions.push_back(SpawnCharacter{});
+        // create_new_character(world, Actor{ .decide_next_action = actors::DoRandomAction{
+        //     .possible_actions = actions
+        // } });
 
         return world;
     }

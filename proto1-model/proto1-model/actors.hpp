@@ -2,11 +2,13 @@
 
 #include <tl/generator.hpp>
 
+#include <proto1-model/export.hpp>
 #include <proto1-model/actionturn.hpp>
 
 
 namespace proto1::model::actors
 {
+    PROTO1_MODEL_SYMEXPORT
     std::vector<AnyAction> default_random_actions();
 
     struct PROTO1_MODEL_SYMEXPORT DoRandomAction
