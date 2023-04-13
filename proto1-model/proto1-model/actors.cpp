@@ -8,7 +8,7 @@
 
 namespace proto1::model::actors
 {
-    AnyAction random_action(ActionContext)
+    AnyAction random_action(ActionContext, bool allow_wait)
     {
         static std::random_device r;
         static std::mt19937 rng_gen(r()); // FIXME: better seed
@@ -18,6 +18,13 @@ namespace proto1::model::actors
             actions::Move{ Vector2::DOWN },
             actions::Move{ Vector2::UP },
         };
+
+        if(allow_wait)
+        {
+            std::uniform_int percent_chance { 1, 100 };
+            if (percent_chance(rng_gen) >= 50)
+                return actions::Wait{};
+        }
 
         AnyAction chosen_action = *stdx::pick_random_element(possible_actions, rng_gen);
         return chosen_action;

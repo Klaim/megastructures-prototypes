@@ -44,7 +44,7 @@ namespace proto1::model
                 if(not body.can_act())
                     continue;
 
-                auto actor = world.actors[body.actor_id.value()];
+                auto& actor = world.actors[ body.actor_id.value() ];
 
                 AnyAction next_action{ actions::Wait{} };
                 if(actor.is_player())
@@ -60,6 +60,7 @@ namespace proto1::model
                 }
 
                 ActionResults action_results = execute(next_action, { world, body, actor });
+                body.last_action_failed = action_results.action_failed;
                 turn_info.events = stdx::append_ranges(turn_info.events, action_results.events);
 
             }

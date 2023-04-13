@@ -6,6 +6,7 @@
 
 #include <boost/container/flat_map.hpp>
 #include <entt/entt.hpp>
+#include <stdx/function2.hpp>
 
 #include <proto1-model/export.hpp>
 
@@ -98,13 +99,14 @@ namespace proto1::model
 
         bool is_player() const { return kind == Kind::player; }
 
-        std::function<AnyAction (ActionContext)> decide_next_action;
+        fu2::unique_function<AnyAction (ActionContext)> decide_next_action;
     };
 
     struct Body
     {
         Position position;
         std::optional<ActorID> actor_id;
+        bool last_action_failed = false;
 
         bool can_act() const { return actor_id.has_value(); }
     };

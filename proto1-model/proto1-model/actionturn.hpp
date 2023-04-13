@@ -20,6 +20,7 @@ namespace proto1::model
 
     struct ActionResults
     {
+        bool action_failed = false;
         std::vector<Event> events;
     };
 

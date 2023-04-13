@@ -12,10 +12,10 @@ namespace proto1::model::actions
         {
             const auto new_position = action_context.body_acting.position + direction;
             if(not action_context.world.is_free_position(new_position))
-                return { {Event{}} };
+                return { .action_failed = true, .events = {Event{}} };
 
             action_context.body_acting.position = new_position;
-            return { {Event{}} };
+            return { .events = {Event{}} };
         }
     };
 
