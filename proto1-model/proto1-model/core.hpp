@@ -3,6 +3,7 @@
 #include <string>
 #include <optional>
 #include <vector>
+#include <functional>
 
 #include <boost/container/flat_map.hpp>
 #include <entt/entt.hpp>
@@ -99,7 +100,8 @@ namespace proto1::model
 
         bool is_player() const { return kind == Kind::player; }
 
-        fu2::unique_function<AnyAction (ActionContext)> decide_next_action;
+        // fu2::unique_function<AnyAction (ActionContext)> decide_next_action;
+        std::function<AnyAction (ActionContext)> decide_next_action;
     };
 
     struct Body

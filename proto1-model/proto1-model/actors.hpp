@@ -7,7 +7,9 @@
 
 namespace proto1::model::actors
 {
-    AnyAction random_action(ActionContext, bool allow_wait = true);
+    AnyAction random_action(ActionContext);
+    AnyAction random_action_or_wait(ActionContext);
+
 
     class WalkUntilYouReachAWall
     {
@@ -16,6 +18,17 @@ namespace proto1::model::actors
         WalkUntilYouReachAWall() = default;
         WalkUntilYouReachAWall(WalkUntilYouReachAWall&&) noexcept = default;
         WalkUntilYouReachAWall& operator=(WalkUntilYouReachAWall&&) noexcept = default;
+        
+        WalkUntilYouReachAWall(const WalkUntilYouReachAWall& other)
+        {
+            last_action = other.last_action;
+        }
+
+        WalkUntilYouReachAWall& operator=(const WalkUntilYouReachAWall& other)
+        {
+            *this = WalkUntilYouReachAWall(other);
+            return *this;
+        }
 
         AnyAction operator()(ActionContext action_context)
         {
@@ -69,7 +82,7 @@ namespace proto1::model::actors
                 }
 
                 if(not last_action.has_value())
-                    last_action = random_action(*current_action_context, false);
+                    last_action = random_action(*current_action_context);
 
                 co_yield *last_action;
             }
