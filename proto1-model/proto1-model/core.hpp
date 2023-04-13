@@ -142,5 +142,7 @@ namespace proto1::model
     PROTO1_MODEL_SYMEXPORT 
     World create_test_world();
 
+    PROTO1_MODEL_SYMEXPORT 
+    void create_new_character(World& world, Actor actor);
 
 }

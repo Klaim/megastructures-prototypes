@@ -117,6 +117,17 @@ namespace proto1::model
         return area;
     }
 
+    void create_new_character(World& world, Actor actor)
+    {
+        const auto id = world.entities.create();
+        const auto actor_id = Actor::new_id();
+        world.actors.insert({ actor_id, std::move(actor) });
+        world.entities.emplace<Body>(id, Body{ 
+            .position = random_free_position(world.area),
+            .actor_id = actor_id,
+        });
+    }
+
     World create_test_world()
     {
         World world
@@ -124,33 +135,9 @@ namespace proto1::model
             .area = create_test_area({ 19, 19 }, 10),
         };
 
-        const auto player_id = world.entities.create();
-        const auto player_actor_id = Actor::new_id();
-        world.actors.insert({ player_actor_id, Actor{ .kind = Actor::Kind::player }});
-        world.entities.emplace<Body>(player_id, Body{ 
-            .position = random_free_position(world.area),
-            .actor_id = player_actor_id,
-        });
-
-        {
-            const auto npc_id = world.entities.create();
-            const auto npc_actor_id = Actor::new_id();
-            world.actors.insert({ npc_actor_id, Actor{ .decide_next_action = actors::DoRandomAction{} } });
-            world.entities.emplace<Body>(npc_id, Body{ 
-                .position = random_free_position(world.area),
-                .actor_id = npc_actor_id,
-            });
-        }
-
-        {
-            const auto npc_id = world.entities.create();
-            const auto npc_actor_id = Actor::new_id();
-            world.actors.insert({ npc_actor_id, Actor{ .decide_next_action = actors::WalkUntilYouReachAWall{} } });
-            world.entities.emplace<Body>(npc_id, Body{ 
-                .position = random_free_position(world.area),
-                .actor_id = npc_actor_id,
-            });
-        }
+        create_new_character(world, Actor{ .kind = Actor::Kind::player });
+        create_new_character(world, Actor{ .decide_next_action = actors::DoRandomAction{} });
+        create_new_character(world, Actor{ .decide_next_action = actors::WalkUntilYouReachAWall{} });
 
         return world;
     }
