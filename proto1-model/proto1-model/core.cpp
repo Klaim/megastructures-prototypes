@@ -135,7 +135,7 @@ namespace proto1::model
         {
             const auto npc_id = world.entities.create();
             const auto npc_actor_id = Actor::new_id();
-            world.actors.insert({ npc_actor_id, Actor{ .decide_next_action = actors::random_action_or_wait } });
+            world.actors.insert({ npc_actor_id, Actor{ .decide_next_action = actors::DoRandomAction{} } });
             world.entities.emplace<Body>(npc_id, Body{ 
                 .position = random_free_position(world.area),
                 .actor_id = npc_actor_id,

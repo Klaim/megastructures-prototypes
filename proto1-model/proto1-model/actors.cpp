@@ -8,40 +8,69 @@
 
 namespace proto1::model::actors
 {
-    namespace
+    std::vector<AnyAction> default_random_actions()
     {
-        AnyAction random_action(ActionContext, bool allow_wait)
+        return std::vector<AnyAction>(actions::ADJACENT_MOVES.begin(), actions::ADJACENT_MOVES.end());
+    }
+
+    AnyAction DoRandomAction::operator()(ActionContext context) const
+    {
+        static std::random_device r;
+        static std::mt19937 rng_gen(r()); // FIXME: better seed
+
+        if(allow_waiting)
         {
-            static std::random_device r;
-            static std::mt19937 rng_gen(r()); // FIXME: better seed
-            static const std::vector<AnyAction> possible_actions {
-                actions::Move{ Vector2::LEFT },
-                actions::Move{ Vector2::RIGHT },
-                actions::Move{ Vector2::DOWN },
-                actions::Move{ Vector2::UP },
-            };
-
-            if(allow_wait)
-            {
-                std::uniform_int percent_chance { 1, 100 };
-                if (percent_chance(rng_gen) >= 50)
-                    return actions::Wait{};
-            }
-
-            AnyAction chosen_action = *stdx::pick_random_element(possible_actions, rng_gen);
-            return chosen_action;
+            std::uniform_int percent_chance { 1, 100 };
+            if (percent_chance(rng_gen) >= 50)
+                return actions::Wait{};
         }
 
+        AnyAction chosen_action = *stdx::pick_random_element(possible_actions, rng_gen);
+        return chosen_action;
     }
 
-    AnyAction random_action(ActionContext context)
+    AnyAction WalkUntilYouReachAWall::operator()(ActionContext action_context)
     {
-        return random_action(context, false);
+        current_action_context = &action_context;
+        
+        if(state)
+        {
+            ++state->iterator;
+        }
+        else
+        {
+            state = State{ start_decision_logic() };
+            state->iterator = state->generator.begin();
+        }
+
+        current_action_context = nullptr;
+
+        if(state->iterator != state->generator.end())
+        {
+            return *state->iterator;
+        }
+        else
+        {
+            state.reset();
+            return actions::Wait{};
+        }
     }
 
-    AnyAction random_action_or_wait(ActionContext context)
+    WalkUntilYouReachAWall::Generator WalkUntilYouReachAWall::start_decision_logic()
     {
-        return random_action(context, true);
+        assert(current_action_context);
+        while(true)
+        {
+            if(current_action_context->body_acting.last_action_failed)
+            {
+                last_action.reset();
+            }
+
+            if(not last_action.has_value())
+                last_action = do_random_action(*current_action_context);
+
+            co_yield *last_action;
+        }
     }
 
 }
