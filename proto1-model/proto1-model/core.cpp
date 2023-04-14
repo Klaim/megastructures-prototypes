@@ -2,7 +2,9 @@
 
 #include <random>
 #include <functional>
-#include <ranges>
+#include <algorithm>
+
+#include <proto1-model/actors.hpp>
 
 namespace proto1::model
 {
@@ -53,11 +55,27 @@ namespace proto1::model
         }
 
     }
+
     
     ActorID Actor::new_id()
     {
         static ActorID next_id = 0;
         return next_id++;
+    }
+
+    bool Area::is_wall(const Position& at_position) const
+    {
+        return not is_position_inside(at_position, Rectangle{ Vector2::ZERO, size })
+            || std::ranges::find(walls, at_position) != walls.end();
+    }
+
+    bool World::is_free_position(const Position& position) const
+    {
+        return not area.is_wall(position)
+            && std::ranges::none_of(entities.view<const Body>().each(), [&](auto&& data){
+                const auto& [entity_id, body] = data;
+               return body.position == position; 
+            });
     }
 
     bool World::is_controlled_by_player(const Body& body) const
@@ -117,7 +135,7 @@ namespace proto1::model
 
         const auto npc_id = world.entities.create();
         const auto npc_actor_id = Actor::new_id();
-        world.actors.insert({ npc_actor_id, Actor{} });
+        world.actors.insert({ npc_actor_id, Actor{ .decide_next_action = actors::random_action } });
         world.entities.emplace<Body>(npc_id, Body{ 
             .position = random_free_position(world.area),
             .actor_id = npc_actor_id,
