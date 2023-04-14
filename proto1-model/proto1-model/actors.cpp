@@ -20,7 +20,7 @@ namespace proto1::model::actors
 
         if(allow_waiting)
         {
-            std::uniform_int percent_chance { 1, 100 };
+            std::uniform_int_distribution<int> percent_chance { 1, 100 };
             if (percent_chance(rng_gen) >= 50)
                 return actions::Wait{};
         }
