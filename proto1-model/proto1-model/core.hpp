@@ -76,9 +76,9 @@ namespace proto1::model
     inline bool is_position_inside(const Position& position, const Rectangle& rectangle)
     {
         return position.x >= rectangle.lowest_x()
-            && position.x <= rectangle.highest_x()
+            && position.x < rectangle.highest_x()
             && position.y >= rectangle.lowest_y()
-            && position.y <= rectangle.highest_y();
+            && position.y < rectangle.highest_y();
     }
 
     using ActorID = int;
