@@ -52,6 +52,17 @@ namespace proto1::view
     {
         sf::Font font;
     };
+    
+    class Grid
+    {
+        sf::VertexArray horizontal_lines;
+        sf::VertexArray vertical_lines;
+    public:
+        Grid(const model::Size& size, const sf::Color& color, float square_size);
+
+        void draw(sf::RenderWindow& window) const;
+    };
+
 
     class View
     {
@@ -65,6 +76,7 @@ namespace proto1::view
         Config config;
         model::World& world;
         std::vector<Entity> entities_views;
+        Grid grid;
     };
 
 }

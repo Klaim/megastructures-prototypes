@@ -64,6 +64,60 @@ namespace proto1::view
 
             return all_views;
         }
+
+     
+
+
+    }
+
+    
+
+    Grid::Grid(const model::Size& size, const sf::Color& color, float square_size)
+    {
+        assert(size.height >= 0);
+        assert(size.width >= 0);
+
+        const std::size_t row_count = size.height + 1;
+        const std::size_t column_count = size.width + 1;
+        
+        horizontal_lines.setPrimitiveType(sf::Lines);
+        horizontal_lines.resize(row_count * 2);
+        for(std::size_t line_idx = 0; line_idx < row_count; ++line_idx)
+        {
+            const auto left_vertex_idx = line_idx * 2;
+            const auto right_vertex_idx = left_vertex_idx + 1;
+        
+            horizontal_lines[left_vertex_idx].position.y = square_size * line_idx;
+            horizontal_lines[left_vertex_idx].position.x = 0;
+            horizontal_lines[right_vertex_idx].position.y = square_size * line_idx;
+            horizontal_lines[right_vertex_idx].position.x = square_size * size.height;
+        }
+
+        vertical_lines.setPrimitiveType(sf::Lines);
+        vertical_lines.resize(column_count * 2);
+        for(std::size_t line_idx = 0; line_idx < column_count; ++line_idx)
+        {
+            const auto left_vertex_idx = line_idx * 2;
+            const auto right_vertex_idx = left_vertex_idx + 1;
+        
+            vertical_lines[left_vertex_idx].position.x = square_size * line_idx;
+            vertical_lines[left_vertex_idx].position.y = 0;
+            vertical_lines[right_vertex_idx].position.y = square_size * size.width;
+            vertical_lines[right_vertex_idx].position.x = square_size * line_idx;
+        }
+        
+        for(std::size_t idx = 0; idx < horizontal_lines.getVertexCount(); ++idx)
+            horizontal_lines[idx].color = color;
+
+        for(std::size_t idx = 0; idx < vertical_lines.getVertexCount(); ++idx)
+            vertical_lines[idx].color = color;
+    }
+
+
+    void Grid::draw(sf::RenderWindow& window) const
+    {
+        window.draw(horizontal_lines);
+        window.draw(vertical_lines);
     }
 
 
@@ -71,6 +125,7 @@ namespace proto1::view
         : config(view_config)
         , world(world)
         , entities_views(create_view(world, config))
+        , grid(world.area.size, sf::Color::Red, GRID_SQUARE_SIZE)
     {
     }
 
@@ -84,6 +139,8 @@ namespace proto1::view
 
     void View::draw(sf::RenderWindow& window) const
     {
+        grid.draw(window);
+
         for(auto& entity_view : entities_views)
             entity_view.draw(window);
     }
