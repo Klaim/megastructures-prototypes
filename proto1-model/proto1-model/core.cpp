@@ -28,8 +28,8 @@ namespace proto1::model
         Position random_position(const Rectangle& area_section)
         {
             return {
-                .x = random_int(area_section.lowest_x(), area_section.highest_x()),
-                .y = random_int(area_section.lowest_y(), area_section.highest_y()),
+                .x = random_int(area_section.lowest_x(), area_section.highest_x() - 1),
+                .y = random_int(area_section.lowest_y(), area_section.highest_y() - 1),
             };
         }
 
