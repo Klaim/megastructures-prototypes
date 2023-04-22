@@ -69,12 +69,22 @@ jobs:
           version: latest
           platform: x64
 
+      - name: Clang version alias
+        if: ${{ matrix.toolchain }} == clang16
+        run: alias clang-16=clang && alias clang++-16=clang++
+
+      - name: GCC version alias
+        if: ${{ matrix.toolchain }} == gcc12
+        run: alias gcc-12=gcc && alias g++-12=g++
+
       - name: Info about clang
         if: startswith('clang', matrix.toolchain)
         run: clang++ --version
+
       - name: Info about gcc
         if: startsWith('gcc', matrix.toolchain)
         run: g++ --version
+
       # We omit trying to find `cl` from msvc because it's annoying, and the info is already in steps below.
       - name: Info about toolchain
         run: echo "Look into 'Create all build configurations' step for details about the toolchain."
