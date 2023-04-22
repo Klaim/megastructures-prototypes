@@ -13,7 +13,7 @@ jobs:
           - os: ubuntu-latest
             toolchain: msvc
           - os: ubuntu-latest # TODO: Remove this one once the clang with libc++ is fixed
-            toolchain: clang clang16
+            toolchain: clang || clang16
           - os: macos-latest
             toolchain: msvc
           - os: macos-latest # TODO: Remove this one once the clang of the system is fixed
@@ -21,7 +21,7 @@ jobs:
           - os: macos-latest # TODO: Remove this one once the clang on macos is fixed
             toolchain: clang
           - os: windows-latest
-            toolchain: gcc gcc12
+            toolchain: gcc || gcc12
 
     name: Build & Run Tests
     runs-on: ${{ matrix.os }}
