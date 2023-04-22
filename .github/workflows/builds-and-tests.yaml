@@ -71,11 +71,11 @@ jobs:
 
       - name: Clang 16 version alias on non-linux OS
         if: matrix.toolchain == 'clang16' && !startsWith('ubuntu', matrix.os)
-        run: sed -i -e "$aalias clang-16='clang'" ~/.bashrc && sed -i -e "$aalias clang++-16='clang++'" ~/.bashrc
+        run: echo "$aalias clang-16='clang'" >> ~/.bashrc && echo "$aalias clang++-16='clang++'" >> ~/.bashrc
 
       - name: GCC 12 version alias on non-linux OS
         if: matrix.toolchain == 'gcc12' && !startsWith('ubuntu', matrix.os)
-        run: sed -i -e "$aalias gcc-12='gcc'" ~/.bashrc && sed -i -e "$aalias g++-12='g++'" ~/.bashrc
+        run: echo "$aalias gcc-12='gcc'" >> ~/.bashrc && echo "$aalias g++-12='g++'" >> ~/.bashrc
 
       - name: Info about clang
         if: startswith('clang', matrix.toolchain)
