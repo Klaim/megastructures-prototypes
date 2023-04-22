@@ -69,13 +69,13 @@ jobs:
           version: latest
           platform: x64
 
-      - name: Clang version alias
-        if: ${{ matrix.toolchain }} == clang16
-        run: alias clang-16=clang && alias clang++-16=clang++
+      - name: Clang 16 version alias on non-linux OS
+        if: matrix.toolchain == clang16 && not statsWith('ubuntu', matrix.os)
+        run: sed -i -e "$aalias clang-16='clang'" ~/.bashrc && sed -i -e "$aalias clang++-16='clang++'" ~/.bashrc
 
-      - name: GCC version alias
-        if: ${{ matrix.toolchain }} == gcc12
-        run: alias gcc-12=gcc && alias g++-12=g++
+      - name: GCC 12 version alias on non-linux OS
+        if: matrix.toolchain == gcc12 && not statsWith('ubuntu', matrix.os)
+        run: sed -i -e "$aalias gcc-12='gcc'" ~/.bashrc && sed -i -e "$aalias g++-12='g++'" ~/.bashrc
 
       - name: Info about clang
         if: startswith('clang', matrix.toolchain)
