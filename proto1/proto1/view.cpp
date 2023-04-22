@@ -9,8 +9,8 @@ namespace proto1::view
     const Description &get_description(const EntityKind &kind)
     {
         static std::array<Description, magic_enum::enum_count<EntityKind>()> descriptions{
-            Description{.letter = '@', .letter_color = sf::Color::White, .background_color = sf::Color::Black},
-            Description{.letter = 'Q', .letter_color = sf::Color::Yellow, .background_color = sf::Color::Black},
+            Description{.letter = '@', .letter_color = sf::Color::White, .background_color = sf::Color::Transparent},
+            Description{.letter = 'Q', .letter_color = sf::Color::Yellow, .background_color = sf::Color::Transparent},
             Description{.letter = '#', .letter_color = sf::Color::Black, .background_color = sf::Color::White},
         };
 
