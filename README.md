@@ -4,7 +4,9 @@ This repository contains the code and assets of the prototypes of the game [**ME
 
 Presentation and links
 
-see : https://docs.google.com/presentation/d/1YOBf4iuNcZKgCnOEpWVkoMfEHL0yWTOpm8IMhf159i4/edit?usp=sharing
+- [Presentation & Prototype 1 Bootstrap](https://docs.google.com/presentation/d/1YOBf4iuNcZKgCnOEpWVkoMfEHL0yWTOpm8IMhf159i4/edit?usp=sharing)
+- [Prototype 2 Bootstrap](https://docs.google.com/presentation/d/1XM9JxWTizGZZ8XIcwMebkeGHMlniPzWu_NUlUcsEjgM/edit?usp=sharing)
+
 
 ### Status
 
@@ -12,6 +14,8 @@ see : https://docs.google.com/presentation/d/1YOBf4iuNcZKgCnOEpWVkoMfEHL0yWTOpm8
 
 
 ## Prototype 1 - Overview
+
+**[Presentation Slides](https://docs.google.com/presentation/d/1YOBf4iuNcZKgCnOEpWVkoMfEHL0yWTOpm8IMhf159i4/edit?usp=sharing)**
 
 For this prototype the goal is to evaluate the C++-based techs/tools stack for the game by building a minimalistic roguelike game with the following elements being used for evaluation:
 - Bleeding-edge C++ (beyond C++ 23 where possible)
@@ -29,7 +33,9 @@ See the presenttion above for more details.
 
 *NOTE: this prototype was not started yet.*
 
-For this prototype we will consider using an hexagonal representation of space (knowing that the final game will have a 3D grid ).
+**[Presentation Slides](https://docs.google.com/presentation/d/1XM9JxWTizGZZ8XIcwMebkeGHMlniPzWu_NUlUcsEjgM/edit?usp=sharing)**
+
+For this prototype we will use Godot as the "view" implementation and a C++ library as the "model". The goal is mainly to evaluate how difficult it makes working on the game. Depending on the resuts, we might decide to go with Godot, or try with Unreal or switch to a C++ graphic rendering library instead.
 
 ## Prototype 3 - Overview
 
@@ -41,7 +47,7 @@ For this prototype we will experiment with implementing a special action-turn sy
 
 *NOTE: this prototype was not started yet.*
 
-For this prototype we will use Godot as the "view" implementation and a C++ library as the "model". The goal is mainly to evaluate how difficult it makes working on the game. Depending on the resuts, we might decide to go with Godot, or try with Unreal or switch to a C++ graphic rendering library instead.
+For this prototype we will consider using an hexagonal representation of space (knowing that the final game will have a 3D grid ).
 
 # Development
 
