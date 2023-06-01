@@ -13,3 +13,6 @@ email: mjklaim@gmail.com
 depends: * build2 >= 0.15.0
 depends: * bpkg >= 0.15.0
 #depends: libhello ^1.0.0
+
+depends: godot-cpp == 4.0.3
+depends: proto2-model == $
