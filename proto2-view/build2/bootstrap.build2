@@ -1,0 +1,6 @@
+project = proto2-view
+
+using version
+using config
+using install
+using dist
