@@ -6,7 +6,7 @@ gdextension_name = "megastructures-proto2"
 
 ./: libs{$gdextension_name} doc{README.md} manifest
 
-libs{$gdextension_name}: {hxx ixx txx cxx}{*} $impl_libs $intf_libs
+libs{$gdextension_name}: {hxx ixx txx cxx}{*} $impl_libs $intf_libs file{megastructures-proto2.gdextension}
 
 hxx{export}@./: cxx.importable = false
 
@@ -30,10 +30,10 @@ libs{$gdextension_name}: cxx.export.poptions += -DPROTO2_VIEW_SHARED
 # in place of another pre-release or the final version. See the version module
 # for details on the version.* variable values.
 #
-if $version.pre_release
-  libs{$gdextension_name}: bin.lib.version = "-$version.project_id"
-else
-  libs{$gdextension_name}: bin.lib.version = "-$version.major.$version.minor"
+# if $version.pre_release
+#   libs{$gdextension_name}: bin.lib.version = "-$version.project_id"
+# else
+#   libs{$gdextension_name}: bin.lib.version = "-$version.major.$version.minor"
 
 # Install recreating subdirectories.
 #
@@ -42,3 +42,6 @@ else
   install         = include/
   install.subdirs = true
 }
+
+file{megastructures-proto2.gdextension}@./ : install = $config.install.root
+
