@@ -1,0 +1,47 @@
+intf_libs = # Interface dependencies.
+impl_libs =
+import intf_libs += entt%lib{entt} libboost-container%lib{boost_container} \
+  tl-generator%lib{tl-generator} fmt%lib{fmt} stdx%lib{stdx}
+
+
+lib{proto2-model}: {hxx ixx txx cxx}{** -version} hxx{version} $impl_libs $intf_libs
+
+hxx{version}: in{version} $src_root/manifest
+
+hxx{export}@./: cxx.importable = false
+
+# Build options.
+#
+cxx.poptions =+ "-I$out_root" "-I$src_root"
+
+{hbmia obja}{*}: cxx.poptions += -DPROTO2_MODEL_STATIC_BUILD
+{hbmis objs}{*}: cxx.poptions += -DPROTO2_MODEL_SHARED_BUILD
+
+# Export options.
+#
+lib{proto2-model}:
+{
+  cxx.export.poptions = "-I$out_root" "-I$src_root"
+  cxx.export.libs = $intf_libs
+}
+
+liba{proto2-model}: cxx.export.poptions += -DPROTO2_MODEL_STATIC
+libs{proto2-model}: cxx.export.poptions += -DPROTO2_MODEL_SHARED
+
+# For pre-releases use the complete version to make sure they cannot be used
+# in place of another pre-release or the final version. See the version module
+# for details on the version.* variable values.
+#
+if $version.pre_release
+  lib{proto2-model}: bin.lib.version = "-$version.project_id"
+else
+  lib{proto2-model}: bin.lib.version = "-$version.major.$version.minor"
+
+# Install into the proto2-model/ subdirectory of, say, /usr/include/
+# recreating subdirectories.
+#
+{hxx ixx txx}{*}:
+{
+  install         = include/proto2-model/
+  install.subdirs = true
+}
