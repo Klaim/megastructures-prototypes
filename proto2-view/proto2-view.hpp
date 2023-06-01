@@ -1,7 +1,5 @@
 #pragma once
 
-#include <godot_cpp/classes/sprite2d.hpp>
-
 #include <iosfwd>
 #include <string>
 
