@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://dv3t45nuobex5"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_aaq5h"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_81sch"]
+albedo_color = Color(0.113725, 0.133333, 0.160784, 1)
+
+[node name="main" type="Node3D"]
+script = ExtResource("1_aaq5h")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.927118, 0.250399, -0.27884, 0, 0.744032, 0.668144, 0.374768, -0.619449, 0.689806, 0, 3.25843, 0)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+size = Vector3(100, 2, 100)
+material = SubResource("StandardMaterial3D_81sch")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.995331, 0.0408566, -0.0874498, 1.5569e-08, 0.905998, 0.423283, 0.0965232, 0.421306, -0.901767, 0, 4.38272, -3.49974)
