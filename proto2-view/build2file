@@ -1,0 +1,47 @@
+intf_libs = # Interface dependencies.
+impl_libs = # Implementation dependencies.
+import impl_libs += godot-cpp%liba{godot-cpp}
+
+gdextension_name = "megastructures-proto2"
+
+./: libs{$gdextension_name} doc{README.md} manifest
+
+libs{$gdextension_name}: {hxx ixx txx cxx}{*} $impl_libs $intf_libs file{megastructures-proto2.gdextension}
+
+hxx{export}@./: cxx.importable = false
+
+# Build options.
+#
+cxx.poptions =+ "-I$out_root" "-I$src_root"
+
+{hbmis objs}{*}: cxx.poptions += -DPROTO2_VIEW_SHARED_BUILD
+
+# Export options.
+#
+libs{$gdextension_name}:
+{
+  cxx.export.poptions = "-I$out_root" "-I$src_root"
+  cxx.export.libs = $intf_libs
+}
+
+libs{$gdextension_name}: cxx.export.poptions += -DPROTO2_VIEW_SHARED
+
+# For pre-releases use the complete version to make sure they cannot be used
+# in place of another pre-release or the final version. See the version module
+# for details on the version.* variable values.
+#
+# if $version.pre_release
+#   libs{$gdextension_name}: bin.lib.version = "-$version.project_id"
+# else
+#   libs{$gdextension_name}: bin.lib.version = "-$version.major.$version.minor"
+
+# Install recreating subdirectories.
+#
+{hxx ixx txx}{*}:
+{
+  install         = include/
+  install.subdirs = true
+}
+
+file{megastructures-proto2.gdextension}@./ : install = $config.install.root
+

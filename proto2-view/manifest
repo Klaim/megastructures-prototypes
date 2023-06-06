@@ -1,0 +1,18 @@
+: 1
+name: proto2-view
+version: 0.1.0-a.0.z
+type: lib
+language: c++
+project: megastructures-prototypes
+summary: proto2-view C++ library
+license: other: proprietary ; Not free/open source.
+description-file: README.md
+url: https://example.org/megastructures-prototypes
+email: mjklaim@gmail.com
+#build-error-email: mjklaim@gmail.com
+depends: * build2 >= 0.15.0
+depends: * bpkg >= 0.15.0
+#depends: libhello ^1.0.0
+
+depends: godot-cpp == 4.0.3
+depends: proto2-model == $

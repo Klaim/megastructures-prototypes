@@ -1,0 +1,7 @@
+project = proto2-model
+
+using version
+using config
+using test
+using install
+using dist
