@@ -16,3 +16,4 @@ depends: * bpkg >= 0.15.0
 
 depends: godot-cpp == 4.0.3
 depends: proto2-model == $
+depends: fmt ^10.0.0
