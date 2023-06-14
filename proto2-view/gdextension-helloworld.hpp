@@ -3,22 +3,25 @@
 
 #include <godot_cpp/classes/sprite2d.hpp>
 
-namespace godot {
+namespace proto2
+{
 
-class GDExample : public Sprite2D {
-    GDCLASS(GDExample, Sprite2D)
+    class GDExample : public godot::Sprite2D
+    {
+        GDCLASS(GDExample, godot::Sprite2D)
 
-private:
+    private:
+    protected:
+        static void _bind_methods();
 
-protected:
-    static void _bind_methods();
+    public:
+        GDExample();
+        ~GDExample();
 
-public:
-    GDExample();
-    ~GDExample();
+        void _process(double delta);
 
-    void _process(double delta);
-};
+        void _ready();
+    };
 
 }
 
