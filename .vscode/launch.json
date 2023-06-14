@@ -5,6 +5,17 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "proto2 (godot)",
+            "type": "godot",
+            "request": "launch",
+            "project": "${workspaceFolder}/proto2",
+            "port": 6007,
+            "address": "tcp://127.0.0.1",
+            "launch_game_instance": true,
+            "launch_scene": false,
+            "preLaunchTask": "install proto2-view",
+        },
+        {
             "name": "proto1 (vs-debug)",
             "type": "cppvsdbg",
             "request": "launch",
@@ -26,7 +37,6 @@
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
-            "console": "externalTerminal",
             "preLaunchTask": "${defaultBuildTask}",
 
         },
@@ -52,7 +62,6 @@
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
-            "console": "externalTerminal",
             "preLaunchTask": "build without testing",
 
         },

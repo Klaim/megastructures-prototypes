@@ -19,6 +19,45 @@
         },
         {
             "type": "cppbuild",
+            "label": "Build & Test All",
+            "detail": "Builds all the projects in all configurations run all tests. This is an incremental build.",
+            "command": "bdep",
+            "args": [ "{update test}", "--all" ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+        },
+        {
+            "type": "cppbuild",
+            "label": "install proto2-view",
+            "detail": "Build and install proto2-view GDExtension from default configuration to the proto2 Godot project",
+            "command": "b",
+            "args": [
+                "install:",
+                "${workspaceFolder}/proto2-view/",
+                "config.install.root=${workspaceFolder}/proto2/",
+                "config.install.filter=\"include/@false share/@false lib/@false\"",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+        },
+        {
+            "type": "cppbuild",
             "label": "build without testing",
             "detail": "Builds all the projects in the default configuration, setup symlinks for binaries but dont run the tests. This is an incremental build.",
             "command": "b",

@@ -12,5 +12,5 @@ location: https://github.com/Klaim/build2-tl.git#hack-generator
 
 :
 role: prerequisite
-location: https://github.com/Klaim/build2-godot-cpp.git#main
+location: https://github.com/Klaim/build2-godot-cpp.git#v4.1
 
