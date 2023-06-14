@@ -22,5 +22,5 @@ transform = Transform3D(-0.995331, 0.0408566, -0.0874498, 1.5569e-08, 0.905998, 
 
 [node name="GDExample" type="GDExample" parent="Camera3D"]
 position = Vector2(556, 312)
-rotation = 9.69514
+rotation = 12.6274
 texture = ExtResource("2_y0f8d")
