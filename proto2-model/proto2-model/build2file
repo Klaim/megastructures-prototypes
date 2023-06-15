@@ -1,7 +1,7 @@
 intf_libs = # Interface dependencies.
 impl_libs =
-import intf_libs += entt%lib{entt} libboost-container%lib{boost_container} \
-  tl-generator%lib{tl-generator} fmt%lib{fmt} stdx%lib{stdx}
+import intf_libs += entt%liba{entt} libboost-container%liba{boost_container} \
+  tl-generator%liba{tl-generator} fmt%liba{fmt} stdx%liba{stdx}
 
 
 lib{proto2-model}: {hxx ixx txx cxx}{** -version} hxx{version} $impl_libs $intf_libs
