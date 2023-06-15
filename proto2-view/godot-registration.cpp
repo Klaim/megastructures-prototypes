@@ -1,5 +1,6 @@
 
-#include "gdextension-helloworld.hpp"
+#include "gdexample.hpp"
+#include "proto2-view.hpp"
 
 #include "export.hpp"
 
@@ -16,6 +17,7 @@ namespace proto2
             return;
 
         godot::ClassDB::register_class<GDExample>();
+        godot::ClassDB::register_class<World>();
     }
 
     void uninitialize_example_module(godot::ModuleInitializationLevel p_level)

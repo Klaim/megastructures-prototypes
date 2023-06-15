@@ -1,11 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://bxja4ryrfcshg"]
+[gd_scene load_steps=3 format=3 uid="uid://bxja4ryrfcshg"]
+
+[ext_resource type="Script" path="res://elements/character.gd" id="1_vgxqb"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ggm71"]
 albedo_color = Color(0.803922, 0.168627, 0.803922, 1)
 
 [node name="character" type="Node3D"]
+script = ExtResource("1_vgxqb")
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]
+[node name="model" type="CSGCylinder3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 height = 1.8
 material = SubResource("StandardMaterial3D_ggm71")

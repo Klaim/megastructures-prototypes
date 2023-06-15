@@ -25,9 +25,9 @@ namespace proto2::model::actors
     {
     public:
 
-        WalkUntilYouReachAWall() = default;
-        WalkUntilYouReachAWall(WalkUntilYouReachAWall&&) noexcept = default;
-        WalkUntilYouReachAWall& operator=(WalkUntilYouReachAWall&&) noexcept = default;
+        WalkUntilYouReachAWall();
+        WalkUntilYouReachAWall(WalkUntilYouReachAWall&&) noexcept;
+        WalkUntilYouReachAWall& operator=(WalkUntilYouReachAWall&&) noexcept;
 
         WalkUntilYouReachAWall(const WalkUntilYouReachAWall& other)
         {

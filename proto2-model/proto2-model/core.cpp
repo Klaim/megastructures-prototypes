@@ -144,7 +144,7 @@ namespace proto2::model
     {
         World world
         {
-            .area = create_test_area({ 19, 19 }, 10),
+            .area = create_test_area({ 40, 40 }, 100),
         };
 
         create_new_character(world, Actor{ .kind = Actor::Kind::player });

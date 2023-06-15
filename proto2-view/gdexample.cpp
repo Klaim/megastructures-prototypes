@@ -1,4 +1,4 @@
-#include "gdextension-helloworld.hpp"
+#include "gdexample.hpp"
 
 #include <fmt/printf.h>
 

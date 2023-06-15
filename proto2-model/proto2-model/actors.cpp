@@ -56,6 +56,10 @@ namespace proto2::model::actors
         }
     }
 
+    WalkUntilYouReachAWall::WalkUntilYouReachAWall() = default;
+    WalkUntilYouReachAWall::WalkUntilYouReachAWall(WalkUntilYouReachAWall&&) noexcept = default;
+    WalkUntilYouReachAWall& WalkUntilYouReachAWall::operator=(WalkUntilYouReachAWall&&) noexcept = default;
+
     WalkUntilYouReachAWall::Generator WalkUntilYouReachAWall::start_decision_logic()
     {
         assert(current_action_context);

@@ -18,9 +18,13 @@ size = Vector3(100, 2, 100)
 material = SubResource("StandardMaterial3D_81sch")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-0.995331, 0.0408566, -0.0874498, 1.5569e-08, 0.905998, 0.423282, 0.0965232, 0.421306, -0.901767, 0, 4.38272, -3.49974)
+transform = Transform3D(0.815915, -0.485637, 0.31375, -0.0287808, 0.507872, 0.860952, -0.577455, -0.711494, 0.400403, 29.625, 14.4172, 26.6269)
 
 [node name="GDExample" type="GDExample" parent="."]
 position = Vector2(1121, 28)
 scale = Vector2(0.304688, 0.304688)
 texture = ExtResource("2_54lwc")
+
+[node name="megastructures_world" type="World" parent="."]
+
+[node name="view" type="Node3D" parent="."]
