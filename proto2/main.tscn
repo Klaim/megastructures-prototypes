@@ -11,6 +11,7 @@ script = ExtResource("1_aaq5h")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.927118, 0.250399, -0.27884, 0, 0.744032, 0.668144, 0.374768, -0.619449, 0.689806, 0, 3.25843, 0)
+shadow_enabled = true
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
