@@ -13,7 +13,7 @@ command=$2
 set -e
 
 # Determine OS
-if [[ "$OSTYPE" == "win32" ]]; then
+if [[ "$OSTYPE" == "win32" || "$OSTYPE" == "msys" ]]; then
     platform=windows
 else
     platform=unix
@@ -27,6 +27,8 @@ then
 fi
 
 echo "COMMAND = |$command|"
+echo "OSTYPE = |$OSTYPE|"
+echo "platform = |$platform|"
 
 bdep init --empty
 
