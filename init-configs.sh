@@ -7,8 +7,17 @@
 toolchain=$1
 command=$2
 
+
+
 # Stop on any error:
 set -e
+
+# Determine OS
+if [[ "$OSTYPE" == "win32" ]]; then
+    platform=windows
+else
+    platform=unix
+fi
 
 # Delete all the previous configs.
 if [[ $command = '--clean' ]]
@@ -26,9 +35,10 @@ bdep init --empty
 echo "Projects initialization in new configurations... (debug as default)"
 install_config="config.install.root=./install/"
 common_options="--options-file=./build2-configs/common.options"
+platform_options="--options-file=./build2-configs/$platform.options"
 bdep init --empty
-bdep config create -V @$toolchain-debug build-$toolchain-debug     cc config.config.load=build2-configs/$toolchain-debug.config   $install_config$toolchain-debug   $common_options
-bdep config create -V @$toolchain-release build-$toolchain-release cc config.config.load=build2-configs/$toolchain-release.config $install_config$toolchain-release $common_options
+bdep config create -V @$toolchain-debug build-$toolchain-debug     cc config.config.load=build2-configs/$toolchain-debug.config   $install_config$toolchain-debug   $common_options $platform_options
+bdep config create -V @$toolchain-release build-$toolchain-release cc config.config.load=build2-configs/$toolchain-release.config $install_config$toolchain-release $common_options $platform_options
 bdep init --all
 
 echo "Configurations Ready:"
