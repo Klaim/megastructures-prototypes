@@ -19,22 +19,28 @@ func _ready():
 func _process(_delta):
 
 	if Input.is_action_just_pressed("player_action_wait"):
+		print("------ PLAYER PLAYS WAIT ... -----")
 		_world.player_action_wait()
 		update_world_view()
+		print("------ PLAYER PLAYS WAIT - DONE -----")
 
 
 func _clear_view() -> void:
+	print("-> Clearing view...")
 	for child_node in _view_node.get_children():
 		_view_node.remove_child(child_node)
 		child_node.queue_free()
+	print("-> Clearing view - DONE")
 
 func update_world_view() -> void:
 	_clear_view()
 
+	print("-> Building view ...")
 	var walls_positions = _world.get_walls_positions()
 	var characters_positions = _world.get_characters_positions()
 	var player_pos = _world.get_player_positions()
 
+	print("-> Interpreting model data ...")
 	for wall_pos in walls_positions:
 		var new_wall = prefab_wall.instantiate()
 		new_wall.position = Vector3( wall_pos.x, 0.0, wall_pos.y )
@@ -46,6 +52,8 @@ func update_world_view() -> void:
 		_view_node.add_child(new_character)
 		if player_pos.has(char_pos):
 			new_character.is_player = true
+
+	print("-> Building view - DONE")
 
 
 
