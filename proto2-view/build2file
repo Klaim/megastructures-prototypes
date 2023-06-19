@@ -46,3 +46,4 @@ libs{$gdextension_name}: cxx.export.poptions += -DPROTO2_VIEW_SHARED
 
 file{megastructures-proto2.gdextension}@./ : install = $config.install.root
 
+libs{$gdextension_name} : install = bin/

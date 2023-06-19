@@ -7,9 +7,7 @@ compatibility_minimum = 4.1
 
 macos.debug =               "res://bin/megastructures-proto2.framework"
 macos.release =             "res://bin/megastructures-proto2.framework"
-windows.debug.x86_32 =      "res://bin/megastructures-proto2.dll"
-windows.release.x86_32 =    "res://bin/megastructures-proto2.dll"
 windows.debug.x86_64 =      "res://bin/megastructures-proto2.dll"
 windows.release.x86_64 =    "res://bin/megastructures-proto2.dll"
-linux.debug.x86_64 =        "res://bin/megastructures-proto2.so"
-linux.release.x86_64 =      "res://bin/megastructures-proto2.so"
+linux.debug.x86_64 =        "res://bin/libmegastructures-proto2.so"
+linux.release.x86_64 =      "res://bin/libmegastructures-proto2.so"
