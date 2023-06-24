@@ -4,6 +4,21 @@
 
 namespace proto2::model
 {
+    auto execute(const AnyAction& action, ActionContext action_context) -> ActionResults
+    {
+        // fmt::print("\n{} -> {}", action_context.actor_deciding.is_player() ? "Player" : "NPC", action.type_id().name());
+        // fmt::print("whatever dude");
+        return action.execute(action_context);
+    }
+
+    auto decide_next_action(ActionContext action_context)-> AnyAction
+    {
+        if (action_context.actor_deciding.decide_next_action)
+            return action_context.actor_deciding.decide_next_action(action_context);
+
+        return actions::Wait{};
+    }
+
     TurnSolver::TurnSolver(World& world)
         : world(world)
     {}

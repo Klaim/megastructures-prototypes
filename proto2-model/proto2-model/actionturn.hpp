@@ -127,23 +127,9 @@ namespace proto2::model
         };
     }
 
-    inline
-    auto execute(const AnyAction& action, ActionContext action_context)
-        -> ActionResults
-    {
-        fmt::print("\n{} -> {}", action_context.actor_deciding.is_player() ? "Player" : "NPC", action.type_id().name());
-        return action.execute(action_context);
-    }
+    auto execute(const AnyAction& action, ActionContext action_context) -> ActionResults;
 
-    inline
-    auto decide_next_action(ActionContext action_context)
-        -> AnyAction
-    {
-        if (action_context.actor_deciding.decide_next_action)
-            return action_context.actor_deciding.decide_next_action(action_context);
-
-        return actions::Wait{};
-    }
+    auto decide_next_action(ActionContext action_context)-> AnyAction;
 
     struct TurnInfo
     {
