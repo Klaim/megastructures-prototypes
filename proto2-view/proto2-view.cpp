@@ -19,6 +19,7 @@ namespace proto2
 
     void World::_ready()
     {
+        Node::_ready();
         m_turn_solver.start_until_player_turn();
     }
 
@@ -28,7 +29,6 @@ namespace proto2
         godot::TypedArray<godot::Vector2i> result;
         for(const auto& wall_pos : m_world.area.walls)
             result.append(godot::Vector2i{ wall_pos.x, wall_pos.y });
-
         godot::UtilityFunctions::print("Gathering walls positions - DONE");
         return result;
     }
@@ -36,11 +36,10 @@ namespace proto2
     auto World::get_characters_positions() const -> godot::TypedArray<godot::Vector2i>
     {
         godot::UtilityFunctions::print("Gathering characters positions...");
-        auto bodies = m_world.entities.view<model::Body>();
         godot::TypedArray<godot::Vector2i> result;
+        auto bodies = m_world.entities.view<model::Body>();
         for(auto&& [id, body] : bodies.each())
             result.append(godot::Vector2i{ body.position.x, body.position.y });
-
         godot::UtilityFunctions::print("Gathering characters positions - DONE");
         return result;
     }
@@ -48,8 +47,8 @@ namespace proto2
     auto World::get_player_positions() const -> godot::TypedArray<godot::Vector2i>
     {
         godot::UtilityFunctions::print("Gathering player positions...");
-        auto bodies = m_world.entities.view<model::Body>();
         godot::TypedArray<godot::Vector2i> result;
+        auto bodies = m_world.entities.view<model::Body>();
         for(auto&& [id, body] : bodies.each())
             if(body.actor_id && m_world.actors.at(body.actor_id.value()).is_player())
                 result.append(godot::Vector2i{ body.position.x, body.position.y });
@@ -63,6 +62,7 @@ namespace proto2
         const auto turn_info = m_turn_solver.play_action_until_next_turn(model::actions::Wait{});
         godot::UtilityFunctions::print("Processing turns - DONE");
         godot::UtilityFunctions::print("Current Turn = ", turn_info.current_turn);
+
     }
 
 }

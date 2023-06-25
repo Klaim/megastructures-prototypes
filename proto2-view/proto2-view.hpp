@@ -24,7 +24,7 @@ namespace proto2
 
         void player_action_wait();
 
-        void _ready();
+        void _ready() override;
 
     private:
         proto2::model::World m_world = model::create_test_world();

@@ -7,7 +7,6 @@
 #include <typeindex>
 
 #include <tl/generator.hpp>
-#include <fmt/core.h>
 
 #include <proto2-model/export.hpp>
 #include <proto2-model/core.hpp>

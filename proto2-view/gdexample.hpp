@@ -18,7 +18,7 @@ namespace proto2
         GDExample();
         ~GDExample();
 
-        void _process(double delta);
+        void _process(double delta) override;
 
         void _ready();
     };

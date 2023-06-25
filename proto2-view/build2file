@@ -1,6 +1,6 @@
 intf_libs = # Interface dependencies.
 impl_libs = # Implementation dependencies.
-import impl_libs += godot-cpp%liba{godot-cpp} fmt%liba{fmt}
+import impl_libs += godot-cpp%liba{godot-cpp}
 import impl_libs += proto2-model%liba{proto2-model}
 
 gdextension_name = "megastructures-proto2"

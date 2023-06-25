@@ -1,6 +1,5 @@
 #include "gdexample.hpp"
 
-#include <fmt/printf.h>
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
@@ -26,7 +25,6 @@ namespace proto2
 
     void GDExample::_ready()
     {
-        fmt::println("GDExample : ready!");
     }
 
 }
