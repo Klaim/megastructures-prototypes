@@ -1,6 +1,7 @@
 #include <proto2-view.hpp>
 
 #include <godot_cpp/variant/utility_functions.hpp>
+#include <godot_cpp/classes/engine.hpp>
 
 #include <proto2-model/movement.hpp>
 
@@ -26,6 +27,10 @@ namespace proto2
     void World::_ready()
     {
         Node::_ready();
+
+        if( godot::Engine::get_singleton()->is_editor_hint() )
+            return;
+
         m_turn_solver.start_until_player_turn();
     }
 
