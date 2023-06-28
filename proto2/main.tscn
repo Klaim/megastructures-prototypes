@@ -14,12 +14,12 @@ transform = Transform3D(0.927118, 0.250399, -0.27884, 0, 0.744032, 0.668144, 0.3
 shadow_enabled = true
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.0015, -1, 40.7499)
 size = Vector3(100, 2, 100)
 material = SubResource("StandardMaterial3D_81sch")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.815915, -0.485637, 0.31375, -0.0287808, 0.507872, 0.860952, -0.577455, -0.711494, 0.400403, 29.625, 14.4172, 26.6269)
+transform = Transform3D(1, 0, 0, 0, 0.578242, 0.815865, 0, -0.815865, 0.578242, 25.5956, 12.8852, 38.0003)
 
 [node name="GDExample" type="GDExample" parent="."]
 position = Vector2(1121, 28)

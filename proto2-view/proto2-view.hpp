@@ -23,6 +23,13 @@ namespace proto2
         auto get_player_positions() const -> godot::TypedArray<godot::Vector2i>;
 
         void player_action_wait();
+        void player_action_move_up();
+        void player_action_move_down();
+        void player_action_move_left();
+        void player_action_move_right();
+
+        void play_action(model::AnyAction action);
+
 
         void _ready() override;
 

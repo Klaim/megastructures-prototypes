@@ -2,6 +2,8 @@
 
 #include <godot_cpp/variant/utility_functions.hpp>
 
+#include <proto2-model/movement.hpp>
+
 namespace proto2
 {
     void World::_bind_methods()
@@ -11,6 +13,10 @@ namespace proto2
         ClassDB::bind_method(D_METHOD("get_characters_positions"), &World::get_characters_positions);
         ClassDB::bind_method(D_METHOD("get_player_positions"), &World::get_player_positions);
         ClassDB::bind_method(D_METHOD("player_action_wait"), &World::player_action_wait);
+        ClassDB::bind_method(D_METHOD("player_action_move_up"), &World::player_action_move_up);
+        ClassDB::bind_method(D_METHOD("player_action_move_down"), &World::player_action_move_down);
+        ClassDB::bind_method(D_METHOD("player_action_move_left"), &World::player_action_move_left);
+        ClassDB::bind_method(D_METHOD("player_action_move_right"), &World::player_action_move_right);
 
     }
 
@@ -56,14 +62,39 @@ namespace proto2
         return result;
     }
 
-    void World::player_action_wait()
+    void World::play_action(model::AnyAction action)
     {
-        godot::UtilityFunctions::print("Player waits, processing turns...");
-        const auto turn_info = m_turn_solver.play_action_until_next_turn(model::actions::Wait{});
+        godot::UtilityFunctions::print("Player's action: {}, processing turns...", action.type_id().name());
+        const auto turn_info = m_turn_solver.play_action_until_next_turn(std::move(action));
         godot::UtilityFunctions::print("Processing turns - DONE");
         godot::UtilityFunctions::print("Current Turn = ", turn_info.current_turn);
-
     }
+
+    void World::player_action_wait()
+    {
+        play_action(model::actions::Wait{});
+    }
+
+    void World::player_action_move_up()
+    {
+        play_action(model::actions::MOVE_UP);
+    }
+
+    void World::player_action_move_down()
+    {
+        play_action(model::actions::MOVE_DOWN);
+    }
+
+    void World::player_action_move_left()
+    {
+        play_action(model::actions::MOVE_LEFT);
+    }
+
+    void World::player_action_move_right()
+    {
+        play_action(model::actions::MOVE_RIGHT);
+    }
+
 
 }
 

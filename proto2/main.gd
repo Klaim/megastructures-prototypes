@@ -18,12 +18,27 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 
+	var need_view_update = true
 	if Input.is_action_just_pressed("player_action_wait"):
-		print("------ PLAYER PLAYS WAIT ... -----")
 		_world.player_action_wait()
-		update_world_view()
-		print("------ PLAYER PLAYS WAIT - DONE -----")
 
+	elif Input.is_action_just_pressed("player_action_move_up"):
+		_world.player_action_move_up()
+
+	elif Input.is_action_just_pressed("player_action_move_down"):
+		_world.player_action_move_down()
+
+	elif Input.is_action_just_pressed("player_action_move_left"):
+		_world.player_action_move_left()
+
+	elif Input.is_action_just_pressed("player_action_move_right"):
+		_world.player_action_move_right()
+
+	else:
+		need_view_update = false
+
+	if need_view_update:
+		update_world_view()
 
 func _clear_view() -> void:
 	print("-> Clearing view...")
