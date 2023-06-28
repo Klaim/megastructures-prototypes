@@ -104,8 +104,26 @@ namespace proto2::model
     Area create_test_area(Size size, int wall_count)
     {
         Area area{
-            .size = size,
+            .size = { size.width + 2, size.height + 2 },
         };
+
+        const auto fill_line_with_walls = [&](int y){
+            for(int x = 0; x < area.size.width; ++x)
+                    area.walls.push_back({ x, y });
+        };
+
+        for(int y = 0; y < area.size.height; ++y)
+        {
+            if(y == 0 || y == area.size.height - 1)
+            {
+                fill_line_with_walls(y);
+            }
+            else
+            {
+                area.walls.push_back({ 0, y });
+                area.walls.push_back({ area.size.width - 1, y });
+            }
+        }
 
         while(wall_count > 0)
         {
