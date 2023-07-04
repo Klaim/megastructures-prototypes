@@ -8,8 +8,8 @@ description-file: README.md
 url: https://example.org/megastructures-prototypes
 email: mjklaim@gmail.com
 #build-error-email: mjklaim@gmail.com
-depends: * build2 >= 0.16.0-
-depends: * bpkg >= 0.16.0-
+depends: * build2 >= 0.16.0
+depends: * bpkg >= 0.16.0
 
 depends: proto1-model == $
 depends: fmt ^10.0.0
