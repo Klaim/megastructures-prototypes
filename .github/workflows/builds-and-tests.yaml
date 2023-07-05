@@ -45,14 +45,14 @@ jobs:
       - name: Install build2
         uses: build2/setup-build2-github-action@v2
         with:
-          build2-version: staged
+          build2-version: 0.16.0
       - name: build2 setup info
         shell: bash
         run: b --version && bdep --version && bpkg --version
       - run: echo "🍏 This job's status is ${{ job.status }}."
 
       - name: Install recent LLVM and Clang
-        if: matrix.toolchain == 'clang' 
+        if: matrix.toolchain == 'clang'
         uses: KyleMayes/install-llvm-action@v1
         with:
           version: "16"
@@ -78,7 +78,7 @@ jobs:
         if: runner.os == 'Linux'
         shell: bash
         run: sudo apt-get update && sudo apt-get install -y libx11-dev libxrandr-dev libudev-dev libglu1-mesa-dev freeglut3-dev mesa-common-dev xorg-dev libvulkan-dev
-      
+
       - name: Create all build configurations
         shell: bash
         run: ./init-configs.sh ${{ matrix.toolchain }}
