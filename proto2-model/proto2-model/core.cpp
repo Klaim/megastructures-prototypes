@@ -137,10 +137,11 @@ namespace proto2::model
 
     void create_new_character(World& world, Actor actor)
     {
-        const auto id = world.entities.create();
+        const auto body_id = world.entities.create();
         const auto actor_id = Actor::new_id();
         world.actors.insert({ actor_id, std::move(actor) });
-        world.entities.emplace<Body>(id, Body{
+        world.entities.emplace<Body>(body_id, Body{
+            .id = body_id,
             .position = random_free_position(world.area),
             .actor_id = actor_id,
         });

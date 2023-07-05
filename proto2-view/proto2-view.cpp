@@ -73,6 +73,12 @@ namespace proto2
         const auto turn_info = m_turn_solver.play_action_until_next_turn(std::move(action));
         godot::UtilityFunctions::print("Processing turns - DONE");
         godot::UtilityFunctions::print("Current Turn = ", turn_info.current_turn);
+
+        for(const auto& event : turn_info.events)
+        {
+            const std::string event_description = std::format("[{}]: {}", event.type_id().name(), event.text_description());
+            godot::UtilityFunctions::print("  -> ", event_description.c_str());
+        }
     }
 
     void World::player_action_wait()

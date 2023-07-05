@@ -4,6 +4,7 @@
 #include <optional>
 #include <vector>
 #include <functional>
+#include <format>
 
 #include <boost/container/flat_map.hpp>
 #include <entt/entt.hpp>
@@ -82,6 +83,8 @@ namespace proto2::model
     }
 
     using ActorID = int;
+    using BodyID = entt::registry::entity_type;
+
 
     class AnyAction;
     class ActionContext;
@@ -106,6 +109,7 @@ namespace proto2::model
 
     struct Body
     {
+        BodyID id = {};
         Position position;
         std::optional<ActorID> actor_id;
         bool last_action_failed = false;
@@ -146,3 +150,11 @@ namespace proto2::model
     void create_new_character(World& world, Actor actor);
 
 }
+
+template <> struct std::formatter<proto2::model::BodyID> : std::formatter<unsigned long>
+{
+    auto format(proto2::model::BodyID id, std::format_context& ctx) const
+    {
+        return formatter<unsigned long>::format(static_cast<unsigned long>(id), ctx);
+    }
+};

@@ -5,6 +5,8 @@
 #include <type_traits>
 #include <memory>
 #include <typeindex>
+#include <string>
+#include <format>
 
 #include <tl/generator.hpp>
 
@@ -15,12 +17,89 @@
 namespace proto2::model
 {
 
-    struct Event{}; // TODO: make this type-erasing wrapper?
+    template<class T>
+    concept Event = std::semiregular<T> and requires(const T& event)
+    {
+        { event.text_description() } -> std::convertible_to<std::string>;
+    };
+
+    struct AnyEvent
+    {
+        AnyEvent() = default;
+
+        AnyEvent(const AnyEvent& other)
+            : storage(other.storage->clone())
+        {
+        }
+
+        AnyEvent& operator=(const AnyEvent& other)
+        {
+            storage = other.storage->clone();
+            return *this;
+        }
+
+        AnyEvent(AnyEvent&&) noexcept = default;
+        AnyEvent& operator=(AnyEvent&&) noexcept = default;
+
+        template<Event T>
+        AnyEvent(T impl)
+            requires(not std::is_same_v<AnyEvent, std::remove_cvref_t<T>>)
+            : storage(std::make_unique<Impl<T>>(std::move(impl)))
+        {
+
+        }
+
+        std::type_index type_id() const
+        {
+            return storage->type_id();
+        }
+
+        std::string text_description() const
+        {
+            return storage->text_description();
+        }
+
+    private:
+        struct Interface
+        {
+            virtual std::unique_ptr<Interface> clone() const = 0;
+            virtual std::type_index type_id() const = 0;
+            virtual std::string text_description() const = 0;
+
+            virtual ~Interface() = default;
+        };
+
+        template<Event T>
+        struct Impl : Interface
+        {
+            T impl;
+
+            explicit Impl(T value) : impl(std::move(value)) {}
+
+            std::unique_ptr<Interface> clone() const override
+            {
+                return std::make_unique<Impl<T>>(impl);
+            }
+
+            std::type_index type_id() const override
+            {
+                return typeid(impl);
+            }
+
+            std::string text_description() const override
+            {
+                return impl.text_description();
+            }
+        };
+
+        std::unique_ptr<Interface> storage;
+
+    };
 
     struct ActionResults
     {
-        bool action_failed = false;
-        std::vector<Event> events;
+        bool action_is_success = true;
+        std::vector<AnyEvent> events;
     };
 
     struct ActionContext
@@ -31,9 +110,9 @@ namespace proto2::model
     };
 
     template<class T>
-    concept Action = requires(T&& thing, ActionContext context) // TODO: add value semantics requirements
+    concept Action = std::semiregular<T>  and requires(const T& action, ActionContext context)
     {
-        { thing.execute(context) } -> std::convertible_to<ActionResults>;
+        { action.execute(context) } -> std::convertible_to<ActionResults>;
     };
 
     struct AnyAction
@@ -55,9 +134,9 @@ namespace proto2::model
         AnyAction& operator=(AnyAction&&) noexcept = default;
 
         template<Action T>
-        AnyAction(T&& impl)
+        AnyAction(T impl)
             requires(not std::is_same_v<AnyAction, std::remove_cvref_t<T>>)
-            : storage(std::make_unique<Impl<T>>(std::forward<T>(impl)))
+            : storage(std::make_unique<Impl<T>>(std::move(impl)))
         {
 
         }
@@ -82,10 +161,6 @@ namespace proto2::model
 
             virtual ~Interface() = default;
         };
-
-        // TODO:
-        // consider this https://godbolt.org/z/5ajqT584v
-        // OR BETTER: https://www.fluentcpp.com/2021/01/29/inheritance-without-pointers/
 
         template<Action T>
         struct Impl : Interface
@@ -115,15 +190,31 @@ namespace proto2::model
     };
 
 
+    namespace events
+    {
+        struct Waited
+        {
+            BodyID body_id;
+
+            std::string text_description() const { return std::format("Body{{{}}} waited.", body_id); }
+        };
+
+        static_assert(Event<Waited>);
+    }
+
     namespace actions
     {
+
+
         struct Wait
         {
-            ActionResults execute(ActionContext) const
+            ActionResults execute(ActionContext context) const
             {
-                return {};
+                return { .events = { events::Waited{ .body_id = context.body_acting.id } } };
             }
         };
+
+
     }
 
     auto execute(const AnyAction& action, ActionContext action_context) -> ActionResults;
@@ -133,7 +224,7 @@ namespace proto2::model
     struct TurnInfo
     {
         int current_turn = 0;
-        std::vector<Event> events;
+        std::vector<AnyEvent> events;
     };
 
     class PROTO2_MODEL_SYMEXPORT TurnSolver
