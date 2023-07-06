@@ -41,9 +41,10 @@ namespace proto2::model
         AnyEvent(AnyEvent&&) noexcept = default;
         AnyEvent& operator=(AnyEvent&&) noexcept = default;
 
-        template<Event T>
+        template<class T>
         AnyEvent(T impl)
-            requires(not std::is_same_v<AnyEvent, std::remove_cvref_t<T>>)
+            requires(not std::is_same_v<AnyEvent, std::remove_cvref_t<T>>
+            and Event<T>)
             : storage(std::make_unique<Impl<T>>(std::move(impl)))
         {
 
@@ -133,9 +134,10 @@ namespace proto2::model
         AnyAction(AnyAction&&) noexcept = default;
         AnyAction& operator=(AnyAction&&) noexcept = default;
 
-        template<Action T>
+        template<class T>
         AnyAction(T impl)
             requires(not std::is_same_v<AnyAction, std::remove_cvref_t<T>>)
+            and Action<T>
             : storage(std::make_unique<Impl<T>>(std::move(impl)))
         {
 
