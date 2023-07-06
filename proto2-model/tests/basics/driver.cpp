@@ -4,11 +4,33 @@
 #include <proto2-model/version.hpp>
 #include <proto2-model/core.hpp>
 #include <proto2-model/actionturn.hpp>
-
+#include <proto2-model/movement.hpp>
 
 TEST_CASE( "dummy test" )
 {
     CHECK( 1 == 1 );
+}
+
+TEST_CASE( "AnyAction works" )
+{
+    using namespace proto2;
+
+    {
+        model::AnyAction action = model::actions::Move{ model::Vector2::UP };
+    }
+    {
+        model::AnyAction action(model::actions::Move{ model::Vector2::UP });
+    }
+
+    {
+        model::AnyAction action(model::actions::Move::UP);
+    }
+    {
+        model::AnyAction action{ model::actions::Move::UP };
+    }
+    {
+        model::AnyAction action = model::actions::Move::UP;
+    }
 }
 
 // #include <boost-te.hpp>

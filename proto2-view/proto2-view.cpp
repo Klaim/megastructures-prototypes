@@ -88,22 +88,22 @@ namespace proto2
 
     void World::player_action_move_up()
     {
-        play_action(model::actions::MOVE_UP);
+        play_action(model::actions::Move::UP);
     }
 
     void World::player_action_move_down()
     {
-        play_action(model::actions::MOVE_DOWN);
+        play_action(model::actions::Move::DOWN);
     }
 
     void World::player_action_move_left()
     {
-        play_action(model::actions::MOVE_LEFT);
+        play_action(model::actions::Move::LEFT);
     }
 
     void World::player_action_move_right()
     {
-        play_action(model::actions::MOVE_RIGHT);
+        play_action(model::actions::Move::RIGHT);
     }
 
 
