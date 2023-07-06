@@ -41,6 +41,7 @@ namespace proto2::model
         Vector2 down() const { return *this + DOWN; }
 
     };
+    static_assert(std::regular<Vector2>);
 
 
     using Position = Vector2;
