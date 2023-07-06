@@ -18,7 +18,8 @@ namespace proto2::model
 {
 
     template<class T>
-    concept Event = std::semiregular<T> and requires(const T& event)
+    concept Event = std::semiregular<std::remove_cvref_t<T>>
+        and requires(const std::remove_cvref_t<T>& event)
     {
         { event.text_description() } -> std::convertible_to<std::string>;
     };
@@ -42,10 +43,10 @@ namespace proto2::model
         AnyEvent& operator=(AnyEvent&&) noexcept = default;
 
         template<class T>
-        AnyEvent(T impl)
+        AnyEvent(T&& impl)
             requires(not std::is_same_v<AnyEvent, std::remove_cvref_t<T>>
             and Event<T>)
-            : storage(std::make_unique<Impl<T>>(std::move(impl)))
+            : storage(std::make_unique<Impl<T>>(std::forward<T>(impl)))
         {
 
         }
@@ -111,7 +112,8 @@ namespace proto2::model
     };
 
     template<class T>
-    concept Action = std::semiregular<T>  and requires(const T& action, ActionContext context)
+    concept Action = std::semiregular<std::remove_cvref_t<T>>
+        and requires(const std::remove_cvref_t<T>& action, ActionContext context)
     {
         { action.execute(context) } -> std::convertible_to<ActionResults>;
     };
@@ -135,10 +137,10 @@ namespace proto2::model
         AnyAction& operator=(AnyAction&&) noexcept = default;
 
         template<class T>
-        AnyAction(T impl)
-            requires(not std::is_same_v<AnyAction, std::remove_cvref_t<T>>)
-            and Action<T>
-            : storage(std::make_unique<Impl<T>>(std::move(impl)))
+        AnyAction(T&& impl)
+            requires(not std::is_same_v<AnyAction, std::remove_cvref_t<T>>
+            and Action<T>)
+            : storage(std::make_unique<Impl<T>>(std::forward<T>(impl)))
         {
 
         }
