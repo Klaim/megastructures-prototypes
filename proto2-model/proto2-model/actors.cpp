@@ -10,7 +10,7 @@ namespace proto2::model::actors
 {
     std::vector<AnyAction> default_random_actions()
     {
-        return std::vector<AnyAction>(actions::ADJACENT_MOVES.begin(), actions::ADJACENT_MOVES.end());
+        return std::vector<AnyAction>(actions::ADJACENT_MOVES.cbegin(), actions::ADJACENT_MOVES.cend());
     }
 
     AnyAction DoRandomAction::operator()(ActionContext context) const

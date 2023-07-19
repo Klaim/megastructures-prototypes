@@ -8,11 +8,7 @@
 
 namespace proto2::model
 {
-    const Vector2 Vector2::ZERO = Vector2{};
-    const Vector2 Vector2::UP = Vector2{0, -1};
-    const Vector2 Vector2::DOWN = Vector2{0, 1};
-    const Vector2 Vector2::LEFT = Vector2{-1, 0};
-    const Vector2 Vector2::RIGHT = Vector2{1, 0};
+
 
     namespace
     {
@@ -28,8 +24,8 @@ namespace proto2::model
         Position random_position(const Rectangle& area_section)
         {
             return {
-                .x = random_int(area_section.lowest_x(), area_section.highest_x() - 1),
-                .y = random_int(area_section.lowest_y(), area_section.highest_y() - 1),
+                /*.x =*/ random_int(area_section.lowest_x(), area_section.highest_x() - 1),
+                /*.y =*/ random_int(area_section.lowest_y(), area_section.highest_y() - 1),
             };
         }
 
@@ -65,7 +61,7 @@ namespace proto2::model
 
     bool Area::is_wall(const Position& at_position) const
     {
-        return not is_position_inside(at_position, Rectangle{ Vector2::ZERO, size })
+        return not is_position_inside(at_position, Rectangle{ Vector2_ZERO, size })
             || std::ranges::find(walls, at_position) != walls.end();
     }
 

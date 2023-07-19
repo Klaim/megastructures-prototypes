@@ -16,21 +16,29 @@ TEST_CASE( "AnyAction works" )
     using namespace proto2;
 
     {
-        model::AnyAction action = model::actions::Move{ model::Vector2::UP };
+        model::AnyAction action = model::actions::Move{ model::Vector2_UP };
     }
     {
-        model::AnyAction action(model::actions::Move{ model::Vector2::UP });
+        model::AnyAction action(model::actions::Move{ model::Vector2_UP });
     }
 
     {
-        model::AnyAction action(model::actions::Move::UP);
+        model::AnyAction action(model::actions::Move_UP);
     }
     {
-        model::AnyAction action{ model::actions::Move::UP };
+        model::AnyAction action{ model::actions::Move_UP };
     }
     {
-        model::AnyAction action = model::actions::Move::UP;
+        model::AnyAction action = model::actions::Move_UP;
     }
+}
+
+TEST_CASE( "Vector2 is constexpr" )
+{
+    using namespace proto2;
+    static constexpr model::Vector2 x;
+    static constexpr auto y = x;
+    static constexpr auto z = x + y;
 }
 
 // #include <boost-te.hpp>

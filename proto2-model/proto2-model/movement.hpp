@@ -46,6 +46,14 @@ namespace proto2::model
         {
             Vector2 direction;
 
+            constexpr Move() noexcept = default;
+            constexpr explicit Move(Vector2 direction) noexcept : direction(std::move(direction)) {}
+
+            constexpr Move(const Move& other) noexcept = default;
+            constexpr Move(Move&& other) noexcept = default;
+            constexpr Move& operator=(const Move& other) noexcept = default;
+            constexpr Move& operator=(Move&& other) noexcept = default;
+
             ActionResults execute(ActionContext action_context) const
             {
                 const auto initial_position = action_context.body_acting.position;
@@ -69,16 +77,15 @@ namespace proto2::model
                 };
             }
 
-
-            PROTO2_MODEL_SYMEXPORT static const Move UP;
-            PROTO2_MODEL_SYMEXPORT static const Move DOWN;
-            PROTO2_MODEL_SYMEXPORT static const Move LEFT;
-            PROTO2_MODEL_SYMEXPORT static const Move RIGHT;
-
         };
         static_assert(Action<Move>);
 
-        const inline std::array<Move, 4> ADJACENT_MOVES{ Move::UP, Move::RIGHT, Move::DOWN, Move::LEFT };
+        constexpr Move Move_UP { Vector2_UP };
+        constexpr Move Move_DOWN { Vector2_DOWN };
+        constexpr Move Move_LEFT { Vector2_LEFT };
+        constexpr Move Move_RIGHT { Vector2_RIGHT };
+
+        static constexpr std::array ADJACENT_MOVES{ Move_UP, Move_RIGHT, Move_DOWN, Move_LEFT };
 
     }
 }

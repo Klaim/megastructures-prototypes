@@ -22,27 +22,43 @@ namespace proto2::model
         int x = 0;
         int y = 0;
 
-        friend Vector2 operator+(const Vector2& left, const Vector2& right) noexcept
+        constexpr Vector2(int x, int y) noexcept
+            : x(x), y(y)
+        {}
+
+        constexpr Vector2() noexcept = default;
+        constexpr ~Vector2() = default;
+        constexpr Vector2(const Vector2& other)  noexcept = default;
+        constexpr Vector2(Vector2&& other)  noexcept = default;
+        constexpr Vector2& operator=(const Vector2& other) noexcept = default;
+        constexpr Vector2& operator=(Vector2&& other)  noexcept = default;
+
+        friend constexpr
+        Vector2 operator+(const Vector2& left, const Vector2& right) noexcept
         {
             return { left.x + right.x, left.y + right.y };
         }
 
-        bool operator==(const Vector2&) const = default;
+        constexpr bool operator==(const Vector2&) const noexcept = default;
 
-        PROTO2_MODEL_SYMEXPORT static const Vector2 ZERO;
-        PROTO2_MODEL_SYMEXPORT static const Vector2 UP;
-        PROTO2_MODEL_SYMEXPORT static const Vector2 DOWN;
-        PROTO2_MODEL_SYMEXPORT static const Vector2 LEFT;
-        PROTO2_MODEL_SYMEXPORT static const Vector2 RIGHT;
-
-        Vector2 left() const { return *this + LEFT; }
-        Vector2 right() const { return *this + RIGHT; }
-        Vector2 up() const { return *this + UP; }
-        Vector2 down() const { return *this + DOWN; }
+        // constexpr Vector2 left() const noexcept;
+        // constexpr Vector2 right() const noexcept;
+        // constexpr Vector2 up() const noexcept;
+        // constexpr Vector2 down() const noexcept;
 
     };
     static_assert(std::regular<Vector2>);
 
+    static constexpr Vector2 Vector2_ZERO   = Vector2{};
+    static constexpr Vector2 Vector2_UP     = Vector2{0, -1};
+    static constexpr Vector2 Vector2_DOWN   = Vector2{0, 1};
+    static constexpr Vector2 Vector2_LEFT   = Vector2{-1, 0};
+    static constexpr Vector2 Vector2_RIGHT  = Vector2{1, 0};
+
+    // constexpr Vector2 Vector2::left() const noexcept { return *this + Vector2_LEFT; }
+    // constexpr Vector2 Vector2::right() const noexcept { return *this + Vector2_RIGHT; }
+    // constexpr Vector2 Vector2::up() const noexcept { return *this + Vector2_UP; }
+    // constexpr Vector2 Vector2::down() const noexcept { return *this + Vector2_DOWN; }
 
     using Position = Vector2;
 
