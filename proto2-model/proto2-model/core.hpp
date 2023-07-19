@@ -41,10 +41,10 @@ namespace proto2::model
 
         constexpr bool operator==(const Vector2&) const noexcept = default;
 
-        // constexpr Vector2 left() const noexcept;
-        // constexpr Vector2 right() const noexcept;
-        // constexpr Vector2 up() const noexcept;
-        // constexpr Vector2 down() const noexcept;
+        constexpr Vector2 left() const noexcept;
+        constexpr Vector2 right() const noexcept;
+        constexpr Vector2 up() const noexcept;
+        constexpr Vector2 down() const noexcept;
 
     };
     static_assert(std::regular<Vector2>);
@@ -55,10 +55,10 @@ namespace proto2::model
     static constexpr Vector2 Vector2_LEFT   = Vector2{-1, 0};
     static constexpr Vector2 Vector2_RIGHT  = Vector2{1, 0};
 
-    // constexpr Vector2 Vector2::left() const noexcept { return *this + Vector2_LEFT; }
-    // constexpr Vector2 Vector2::right() const noexcept { return *this + Vector2_RIGHT; }
-    // constexpr Vector2 Vector2::up() const noexcept { return *this + Vector2_UP; }
-    // constexpr Vector2 Vector2::down() const noexcept { return *this + Vector2_DOWN; }
+    constexpr Vector2 Vector2::left() const noexcept { return *this + Vector2_LEFT; }
+    constexpr Vector2 Vector2::right() const noexcept { return *this + Vector2_RIGHT; }
+    constexpr Vector2 Vector2::up() const noexcept { return *this + Vector2_UP; }
+    constexpr Vector2 Vector2::down() const noexcept { return *this + Vector2_DOWN; }
 
     using Position = Vector2;
 
