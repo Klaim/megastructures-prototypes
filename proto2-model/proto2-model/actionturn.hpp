@@ -4,9 +4,10 @@
 #include <vector>
 #include <type_traits>
 #include <memory>
-#include <typeindex>
 #include <string>
 #include <format>
+
+#include <boost/type_index.hpp>
 
 #include <tl/generator.hpp>
 
@@ -51,7 +52,7 @@ namespace proto2::model
 
         }
 
-        std::type_index type_id() const
+        boost::typeindex::type_index type_id() const
         {
             return storage->type_id();
         }
@@ -65,7 +66,7 @@ namespace proto2::model
         struct Interface
         {
             virtual std::unique_ptr<Interface> clone() const = 0;
-            virtual std::type_index type_id() const = 0;
+            virtual boost::typeindex::type_index type_id() const = 0;
             virtual std::string text_description() const = 0;
 
             virtual ~Interface() = default;
@@ -83,9 +84,9 @@ namespace proto2::model
                 return std::make_unique<Impl<T>>(impl);
             }
 
-            std::type_index type_id() const override
+            boost::typeindex::type_index type_id() const override
             {
-                return typeid(impl);
+                return boost::typeindex::type_id<T>();
             }
 
             std::string text_description() const override
@@ -151,7 +152,7 @@ namespace proto2::model
             return storage->execute(action_context);
         }
 
-        std::type_index type_id() const
+        boost::typeindex::type_index type_id() const
         {
             return storage->type_id();
         }
@@ -161,7 +162,7 @@ namespace proto2::model
         {
             virtual ActionResults execute(ActionContext action_context) const = 0;
             virtual std::unique_ptr<Interface> clone() const = 0;
-            virtual std::type_index type_id() const = 0;
+            virtual boost::typeindex::type_index type_id() const = 0;
 
             virtual ~Interface() = default;
         };
@@ -183,9 +184,9 @@ namespace proto2::model
                 return std::make_unique<Impl<T>>(impl);
             }
 
-            std::type_index type_id() const override
+            boost::typeindex::type_index type_id() const override
             {
-                return typeid(impl);
+                return boost::typeindex::type_id<T>();
             }
         };
 

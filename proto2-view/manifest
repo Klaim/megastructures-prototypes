@@ -16,3 +16,4 @@ depends: * bpkg >= 0.16.0
 
 depends: godot-cpp ~4.1.0
 depends: proto2-model == $
+depends: { libboost-pfr libboost-type-index } ^1.81.0
