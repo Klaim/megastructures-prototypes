@@ -5,6 +5,8 @@
 
 #include <proto2-model/movement.hpp>
 
+#include "godot-conversions.hpp"
+
 namespace proto2
 {
     void World::_bind_methods()
@@ -76,7 +78,7 @@ namespace proto2
 
         for(const auto& event : turn_info.events)
         {
-            const std::string event_description = std::format("[{}]: {}", event.type_id().name(), event.text_description());
+            const std::string event_description = std::format("[{}]: {}", type_name(event), event.text_description());
             godot::UtilityFunctions::print("  -> ", event_description.c_str());
         }
     }

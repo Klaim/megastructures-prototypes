@@ -1,6 +1,6 @@
 intf_libs = # Interface dependencies.
 impl_libs =
-import intf_libs += entt%liba{entt} libboost-container%liba{boost_container} \
+import intf_libs += entt%liba{entt} libboost-container%liba{boost_container} libboost-type-index%liba{boost_type_index} \
   tl-generator%liba{tl-generator} stdx%liba{stdx}
 
 
