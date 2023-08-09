@@ -7,6 +7,7 @@
 #include <format>
 
 #include <boost/container/flat_map.hpp>
+#include <boost/describe.hpp>
 #include <entt/entt.hpp>
 #include <stdx/function2.hpp>
 
@@ -48,6 +49,7 @@ namespace proto2::model
 
     };
     static_assert(std::regular<Vector2>);
+    BOOST_DESCRIBE_STRUCT(Vector2, (), (x, y));
 
     static constexpr Vector2 Vector2_ZERO   = Vector2{};
     static constexpr Vector2 Vector2_UP     = Vector2{0, -1};
@@ -64,8 +66,8 @@ namespace proto2::model
 
     struct Size
     {
-        int width;
-        int height;
+        int width = 0;
+        int height = 0;
     };
 
     inline Position operator+(const Position& left, const Size& right)

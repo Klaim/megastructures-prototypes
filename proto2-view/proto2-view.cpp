@@ -78,8 +78,9 @@ namespace proto2
 
         for(const auto& event : turn_info.events)
         {
-            const std::string event_description = std::format("[{}]: {}", type_name(event), event.text_description());
-            godot::UtilityFunctions::print("  -> ", event_description.c_str());
+            const std::string event_description = std::format("[{}]: {}", event.type_name(), event.text_description());
+            auto event_godot = to_godot(event);
+            godot::UtilityFunctions::print("  -> ", event_godot, " : ", event_description.c_str());
         }
     }
 

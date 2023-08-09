@@ -101,6 +101,7 @@
         "strstream": "cpp",
         "valarray": "cpp",
         "regex": "cpp",
-        "pointers": "cpp"
+        "pointers": "cpp",
+        "codecvt": "cpp"
     }
 }

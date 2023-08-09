@@ -6,10 +6,13 @@
 #include <memory>
 #include <string>
 #include <format>
+#include <any>
 
 #include <boost/type_index.hpp>
+#include <boost/algorithm/string/erase.hpp>
 
 #include <tl/generator.hpp>
+#include <nlohmann/json.hpp>
 
 #include <proto2-model/export.hpp>
 #include <proto2-model/core.hpp>
@@ -17,12 +20,85 @@
 
 namespace proto2::model
 {
+    template<class TypeInfo>
+    std::string universal_type_name(const TypeInfo& info)
+    {
+        auto name = info.pretty_name();
+        static constexpr std::string_view struct_prefix = "struct ";
+        static constexpr std::string_view class_prefix = "class ";
+        boost::erase_all(name, struct_prefix);
+        boost::erase_all(name, class_prefix);
+        return name;
+    }
+
+    template<class T>
+    std::string type_name()
+    {
+        return universal_type_name(boost::typeindex::type_id<T>());
+    }
+
+    template<class T>
+    constexpr
+    std::string type_name(const T&)
+    {
+        return type_name<T>();
+    }
+
+
+    template<class T>
+    concept Reflectable = requires
+    {
+        { boost::mp11::mp_for_each<boost::describe::describe_members<T, boost::describe::mod_public>>([](auto&&){}) };
+    };
+
+    template<class T>
+    concept ReflectionSource = requires(const std::remove_cvref_t<T>& x)
+    {
+        { x.reflection() } -> std::same_as<std::string>;
+    };
+
+    template<class T>
+    concept ReflectionReady = Reflectable<T> or ReflectionSource<T>;
+
+    std::string reflection(ReflectionSource auto const & message)
+    {
+        return message.reflection();
+    }
+
+    template<ReflectionReady T>
+    void insert_to_json(nlohmann::json& result, std::string_view name, const T& value)
+    {
+        result[name] = reflection(value);
+    }
+
+    template<typename T>
+        requires (not ReflectionReady<T>)
+    void insert_to_json(nlohmann::json& result, std::string_view name, const T& value)
+    {
+        result[name] = value;
+    }
+
+    template<Reflectable T>
+    std::string reflection(const T& message)
+    {
+        using json = nlohmann::json;
+        json result;
+        const auto name = type_name(message);
+        result["type_name"] = name;
+        boost::mp11::mp_for_each<boost::describe::describe_members<T, boost::describe::mod_public>>(
+            [&](auto member_info) {
+                insert_to_json(result, member_info.name, message.*member_info.pointer);
+            });
+        return result.dump();
+    }
+
 
     template<class T>
     concept Event = std::semiregular<std::remove_cvref_t<T>>
         and requires(const std::remove_cvref_t<T>& event)
     {
         { event.text_description() } -> std::convertible_to<std::string>;
+        { ::proto2::model::reflection(event) } -> std::same_as<std::string>;
     };
 
     struct AnyEvent
@@ -57,9 +133,35 @@ namespace proto2::model
             return storage->type_id();
         }
 
+        std::string type_name() const
+        {
+            return universal_type_name(type_id());
+        }
+
         std::string text_description() const
         {
             return storage->text_description();
+        }
+
+        std::string reflection() const
+        {
+            return storage->reflection();
+        }
+
+        template<Event T>
+        T& value()
+        {
+            const auto requested_type_id = boost::typeindex::type_id<T>();
+            const auto stored_type_id = type_id();
+            if( requested_type_id != stored_type_id )
+                throw std::invalid_argument(std::format("wrong type stored, requested '{}' but stored is '{}'", requested_type_id.pretty_name(), stored_type_id.pretty_name()));
+            return static_cast<Impl<T>*>(storage.get())->impl;
+        }
+
+        template<Event T>
+        const T& value() const
+        {
+            return const_cast<AnyEvent&>(*this).value();
         }
 
     private:
@@ -68,6 +170,7 @@ namespace proto2::model
             virtual std::unique_ptr<Interface> clone() const = 0;
             virtual boost::typeindex::type_index type_id() const = 0;
             virtual std::string text_description() const = 0;
+            virtual std::string reflection() const = 0;
 
             virtual ~Interface() = default;
         };
@@ -93,6 +196,11 @@ namespace proto2::model
             {
                 return impl.text_description();
             }
+
+            std::string reflection() const override
+            {
+                return ::proto2::model::reflection(impl);
+            }
         };
 
         std::unique_ptr<Interface> storage;
@@ -117,6 +225,7 @@ namespace proto2::model
         and requires(const std::remove_cvref_t<T>& action, ActionContext context)
     {
         { action.execute(context) } -> std::convertible_to<ActionResults>;
+        { ::proto2::model::reflection(action) } -> std::same_as<std::string>;
     };
 
     struct AnyAction
@@ -157,12 +266,39 @@ namespace proto2::model
             return storage->type_id();
         }
 
+        std::string type_name() const
+        {
+            return universal_type_name(type_id());
+        }
+
+        std::string reflection() const
+        {
+            return storage->reflection();
+        }
+
+        template<Action T>
+        T& value()
+        {
+            const auto requested_type_id = boost::typeindex::type_id<T>();
+            const auto stored_type_id = type_id();
+            if( requested_type_id != stored_type_id )
+                throw std::invalid_argument(std::format("wrong type stored, requested '{}' but stored is '{}'", requested_type_id.pretty_name(), stored_type_id.pretty_name()));
+            return static_cast<Impl<T>*>(storage.get())->impl;
+        }
+
+        template<Action T>
+        const T& value() const
+        {
+            return const_cast<AnyAction*>(this)->value();
+        }
+
     private:
         struct Interface
         {
             virtual ActionResults execute(ActionContext action_context) const = 0;
             virtual std::unique_ptr<Interface> clone() const = 0;
             virtual boost::typeindex::type_index type_id() const = 0;
+            virtual std::string reflection() const = 0;
 
             virtual ~Interface() = default;
         };
@@ -188,12 +324,23 @@ namespace proto2::model
             {
                 return boost::typeindex::type_id<T>();
             }
+
+            std::string reflection() const
+            {
+                return ::proto2::model::reflection(impl);
+            }
         };
 
         std::unique_ptr<Interface> storage;
 
     };
 
+
+    template<class T>
+    concept AnyMessageType = std::same_as<T, ::proto2::model::AnyAction> or std::same_as<T, ::proto2::model::AnyEvent>;
+
+    template<class T>
+    concept MessageType = not AnyMessageType<T> and (Event<T> or Action<T>);
 
     namespace events
     {
@@ -203,6 +350,7 @@ namespace proto2::model
 
             std::string text_description() const { return std::format("Body{{{}}} waited.", body_id); }
         };
+        BOOST_DESCRIBE_STRUCT(Waited, (), (body_id));
 
         static_assert(Event<Waited>);
     }
@@ -218,7 +366,7 @@ namespace proto2::model
                 return { .events = { events::Waited{ .body_id = context.body_acting.id } } };
             }
         };
-
+        BOOST_DESCRIBE_STRUCT(Wait, (), ());
 
     }
 

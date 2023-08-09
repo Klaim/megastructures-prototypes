@@ -143,16 +143,15 @@ namespace proto2::model
         });
     }
 
-    class SpawnCharacter
+    struct SpawnCharacter
     {
-    public:
         ActionResults execute(ActionContext context) const
         {
             create_new_character(context.world, context.actor_deciding);
             return {};
         }
     };
-
+    BOOST_DESCRIBE_STRUCT(SpawnCharacter, (), ());
     static_assert(Action<SpawnCharacter>);
 
     World create_test_world()

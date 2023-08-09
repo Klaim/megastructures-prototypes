@@ -1,8 +1,11 @@
 #pragma once
 
+#include <array>
+#include <boost/describe.hpp>
+
+
 #include <proto2-model/actionturn.hpp>
 
-#include <array>
 
 namespace proto2::model
 {
@@ -23,6 +26,7 @@ namespace proto2::model
                 );
             }
         };
+        BOOST_DESCRIBE_STRUCT(Moved, (), (body_id, initial_position, new_position));
         static_assert(Event<Moved>);
 
         struct FailedToMove
@@ -38,6 +42,7 @@ namespace proto2::model
                 );
             }
         };
+        BOOST_DESCRIBE_STRUCT(FailedToMove, (), (body_id, target_position));
     }
 
     namespace actions
@@ -78,6 +83,7 @@ namespace proto2::model
             }
 
         };
+        BOOST_DESCRIBE_STRUCT(Move, (), (direction));
         static_assert(Action<Move>);
 
         constexpr Move Move_UP { Vector2_UP };
