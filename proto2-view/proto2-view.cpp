@@ -46,13 +46,13 @@ namespace proto2
         return result;
     }
 
-    auto World::get_characters_positions() const -> godot::TypedArray<godot::Vector2i>
+    auto World::get_characters_positions() const -> godot::Dictionary
     {
         godot::UtilityFunctions::print("Gathering characters positions...");
-        godot::TypedArray<godot::Vector2i> result;
+        godot::Dictionary result;
         auto bodies = m_world.entities.view<model::Body>();
         for(auto&& [id, body] : bodies.each())
-            result.append(godot::Vector2i{ body.position.x, body.position.y });
+            result[ static_cast<int64_t>(id) ] = godot::Vector2i{ body.position.x, body.position.y };
         godot::UtilityFunctions::print("Gathering characters positions - DONE");
         return result;
     }
@@ -69,8 +69,10 @@ namespace proto2
         return result;
     }
 
-    void World::play_action(model::AnyAction action)
+    auto World::play_action(model::AnyAction action) -> godot::Array
     {
+        godot::Array events_sequence;
+
         godot::UtilityFunctions::print("Player's action: {}, processing turns...", action.type_id().name());
         const auto turn_info = m_turn_solver.play_action_until_next_turn(std::move(action));
         godot::UtilityFunctions::print("Processing turns - DONE");
@@ -81,34 +83,36 @@ namespace proto2
             const std::string event_description = std::format("[{}]: {}", event.type_name(), event.text_description());
             auto event_godot = to_godot(event);
             godot::UtilityFunctions::print("  -> ", event_godot, " : ", event_description.c_str());
+            events_sequence.push_back(event_godot);
         }
+
+        return events_sequence;
     }
 
-    void World::player_action_wait()
+    auto World::player_action_wait() -> godot::Array
     {
-        play_action(model::actions::Wait{});
+        return play_action(model::actions::Wait{});
     }
 
-    void World::player_action_move_up()
+    auto World::player_action_move_up() -> godot::Array
     {
-        play_action(model::actions::Move_UP);
+        return play_action(model::actions::Move_UP);
     }
 
-    void World::player_action_move_down()
+    auto World::player_action_move_down() -> godot::Array
     {
-        play_action(model::actions::Move_DOWN);
+        return play_action(model::actions::Move_DOWN);
     }
 
-    void World::player_action_move_left()
+    auto World::player_action_move_left() -> godot::Array
     {
-        play_action(model::actions::Move_LEFT);
+        return play_action(model::actions::Move_LEFT);
     }
 
-    void World::player_action_move_right()
+    auto World::player_action_move_right() -> godot::Array
     {
-        play_action(model::actions::Move_RIGHT);
+        return play_action(model::actions::Move_RIGHT);
     }
-
 
 }
 

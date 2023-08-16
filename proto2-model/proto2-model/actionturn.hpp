@@ -20,6 +20,8 @@
 
 namespace proto2::model
 {
+    using json = nlohmann::json;
+
     template<class TypeInfo>
     std::string universal_type_name(const TypeInfo& info)
     {
@@ -54,34 +56,34 @@ namespace proto2::model
     template<class T>
     concept ReflectionSource = requires(const std::remove_cvref_t<T>& x)
     {
-        { x.reflection() } -> std::same_as<std::string>;
+        { x.reflection() } -> std::same_as<json>;
     };
 
     template<class T>
     concept ReflectionReady = Reflectable<T> or ReflectionSource<T>;
 
-    std::string reflection(ReflectionSource auto const & message)
+    json reflection(ReflectionSource auto const & message)
     {
         return message.reflection();
     }
 
     template<ReflectionReady T>
-    void insert_to_json(nlohmann::json& result, std::string_view name, const T& value)
+    void insert_to_json(json& result, std::string_view name, const T& value)
     {
         result[name] = reflection(value);
     }
 
     template<typename T>
         requires (not ReflectionReady<T>)
-    void insert_to_json(nlohmann::json& result, std::string_view name, const T& value)
+    void insert_to_json(json& result, std::string_view name, const T& value)
     {
         result[name] = value;
     }
 
     template<Reflectable T>
-    std::string reflection(const T& message)
+    json reflection(const T& message)
     {
-        using json = nlohmann::json;
+        using json = json;
         json result;
         const auto name = type_name(message);
         result["type_name"] = name;
@@ -89,7 +91,7 @@ namespace proto2::model
             [&](auto member_info) {
                 insert_to_json(result, member_info.name, message.*member_info.pointer);
             });
-        return result.dump();
+        return result;
     }
 
 
@@ -98,7 +100,7 @@ namespace proto2::model
         and requires(const std::remove_cvref_t<T>& event)
     {
         { event.text_description() } -> std::convertible_to<std::string>;
-        { ::proto2::model::reflection(event) } -> std::same_as<std::string>;
+        { ::proto2::model::reflection(event) } -> std::same_as<json>;
     };
 
     struct AnyEvent
@@ -143,7 +145,7 @@ namespace proto2::model
             return storage->text_description();
         }
 
-        std::string reflection() const
+        json reflection() const
         {
             return storage->reflection();
         }
@@ -170,7 +172,7 @@ namespace proto2::model
             virtual std::unique_ptr<Interface> clone() const = 0;
             virtual boost::typeindex::type_index type_id() const = 0;
             virtual std::string text_description() const = 0;
-            virtual std::string reflection() const = 0;
+            virtual json reflection() const = 0;
 
             virtual ~Interface() = default;
         };
@@ -197,7 +199,7 @@ namespace proto2::model
                 return impl.text_description();
             }
 
-            std::string reflection() const override
+            json reflection() const override
             {
                 return ::proto2::model::reflection(impl);
             }
@@ -225,7 +227,7 @@ namespace proto2::model
         and requires(const std::remove_cvref_t<T>& action, ActionContext context)
     {
         { action.execute(context) } -> std::convertible_to<ActionResults>;
-        { ::proto2::model::reflection(action) } -> std::same_as<std::string>;
+        { ::proto2::model::reflection(action) } -> std::same_as<json>;
     };
 
     struct AnyAction
@@ -271,7 +273,7 @@ namespace proto2::model
             return universal_type_name(type_id());
         }
 
-        std::string reflection() const
+        json reflection() const
         {
             return storage->reflection();
         }
@@ -298,7 +300,7 @@ namespace proto2::model
             virtual ActionResults execute(ActionContext action_context) const = 0;
             virtual std::unique_ptr<Interface> clone() const = 0;
             virtual boost::typeindex::type_index type_id() const = 0;
-            virtual std::string reflection() const = 0;
+            virtual json reflection() const = 0;
 
             virtual ~Interface() = default;
         };
@@ -325,7 +327,7 @@ namespace proto2::model
                 return boost::typeindex::type_id<T>();
             }
 
-            std::string reflection() const
+            json reflection() const
             {
                 return ::proto2::model::reflection(impl);
             }

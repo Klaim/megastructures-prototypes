@@ -24,7 +24,7 @@ namespace proto2
         // 1. convert to json
         // 2. convert to godot::Variant using Godot's json parser
 
-        const auto json_string = model::reflection(value);
+        const auto json_string = model::reflection(value).dump();
         godot::Variant godot_value = godot::JSON::parse_string(json_string.c_str());
 
         return godot_value;

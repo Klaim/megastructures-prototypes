@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include <godot_cpp/variant/array.hpp>
 #include <godot_cpp/variant/typed_array.hpp>
 #include <godot_cpp/classes/node.hpp>
 
@@ -19,16 +19,19 @@ namespace proto2
         ~World();
 
         auto get_walls_positions() const -> godot::TypedArray<godot::Vector2i>;
-        auto get_characters_positions() const -> godot::TypedArray<godot::Vector2i>;
+        auto get_characters_positions() const -> godot::Dictionary;
         auto get_player_positions() const -> godot::TypedArray<godot::Vector2i>;
 
-        void player_action_wait();
-        void player_action_move_up();
-        void player_action_move_down();
-        void player_action_move_left();
-        void player_action_move_right();
+        godot::Array player_action_wait();
+        godot::Array player_action_move_up();
+        godot::Array player_action_move_down();
+        godot::Array player_action_move_left();
+        godot::Array player_action_move_right();
 
-        void play_action(model::AnyAction action);
+        // Applies an action from the player and processes turns until it's the player's
+        // turn again.
+        // Returns a sequence of events as JSON objects that happened when processing turns.
+        auto play_action(model::AnyAction action) -> godot::Array;
 
 
         void _ready() override;
