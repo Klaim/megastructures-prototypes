@@ -16,6 +16,6 @@ depends: * bpkg >= 0.16.0
 
 depends: proto2-model == $
 depends: godot-cpp ~4.1.0
-depends: { libboost-pfr libboost-type-index libboost-describe libboost-mp11 libboost-hana } ^1.81.0
+depends: { libboost-pfr libboost-type-index libboost-describe libboost-mp11 } ^1.81.0
 
 
