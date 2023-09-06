@@ -21,6 +21,20 @@ func _process(_delta):
 	if Input.is_action_just_pressed("player_action_wait"):
 		events_sequence = _world.player_action_wait()
 
+	elif Input.is_key_pressed(KEY_CTRL):
+		# Attacks
+		if Input.is_action_just_pressed("player_action_move_up"):
+			events_sequence = _world.player_action_attack(Vector2i.UP)
+
+		elif Input.is_action_just_pressed("player_action_move_down"):
+			events_sequence = _world.player_action_attack(Vector2i.DOWN)
+
+		elif Input.is_action_just_pressed("player_action_move_left"):
+			events_sequence = _world.player_action_attack(Vector2i.LEFT)
+
+		elif Input.is_action_just_pressed("player_action_move_right"):
+			events_sequence = _world.player_action_attack(Vector2i.RIGHT)
+
 	elif Input.is_action_just_pressed("player_action_move_up"):
 		events_sequence = _world.player_action_move(Vector2i.UP)
 
@@ -81,14 +95,16 @@ func update_world_view(events: Array) -> void:
 		match event.type_name:
 
 			"proto2::model::events::Waited":
-				print("-> Character %s just waits." %event.body_id)
+#				print("-> Character %s just waits." %event.body_id)
+				pass
 
 			"proto2::model::events::Moved":
-				print("-> Character %s just moved from %s to %s" % [ event.body_id, event.initial_position, event.new_position ])
+#				print("-> Character %s just moved from %s to %s" % [ event.body_id, event.initial_position, event.new_position ])
 				var new_position := Vector2i(event.new_position.x, event.new_position.y)
 				var character_view : Node3D = get_character_view(event.body_id as int)
 				character_view.move_to(new_position)
 
 			"proto2::model::events::FailedToMove":
-				print("-> Character %s failed to move." % event.body_id)
+#				print("-> Character %s failed to move." % event.body_id)
+				pass
 

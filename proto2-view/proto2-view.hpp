@@ -24,6 +24,7 @@ namespace proto2
 
         godot::Array player_action_wait();
         godot::Array player_action_move(const godot::Vector2i& direction);
+        godot::Array player_action_attack(const godot::Vector2i& direction);
 
         // Applies an action from the player and processes turns until it's the player's
         // turn again.

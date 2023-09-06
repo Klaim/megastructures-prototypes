@@ -13,7 +13,7 @@ namespace proto2::model
     {
         struct Moved
         {
-            BodyID body_id;
+            EntityID body_id;
             Vector2 initial_position;
             Vector2 new_position;
 
@@ -31,7 +31,7 @@ namespace proto2::model
 
         struct FailedToMove
         {
-            BodyID body_id;
+            EntityID body_id;
             Vector2 target_position;
 
             std::string text_description() const

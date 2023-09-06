@@ -4,6 +4,7 @@
 #include <godot_cpp/classes/engine.hpp>
 
 #include <proto2-model/movement.hpp>
+#include <proto2-model/combat.hpp>
 
 #include "godot-conversions.hpp"
 
@@ -17,6 +18,7 @@ namespace proto2
         ClassDB::bind_method(D_METHOD("get_player_positions"), &World::get_player_positions);
         ClassDB::bind_method(D_METHOD("player_action_wait"), &World::player_action_wait);
         ClassDB::bind_method(D_METHOD("player_action_move"), &World::player_action_move);
+        ClassDB::bind_method(D_METHOD("player_action_attack"), &World::player_action_attack);
 
     }
 
@@ -77,9 +79,8 @@ namespace proto2
 
         for(const auto& event : turn_info.events)
         {
-            const std::string event_description = std::format("[{}]: {}", event.type_name(), event.text_description());
+            godot::UtilityFunctions::print("  -> ", event.text_description().c_str());
             auto event_godot = to_godot(event);
-            godot::UtilityFunctions::print("  -> ", event_godot, " : ", event_description.c_str());
             events_sequence.push_back(event_godot);
         }
 
@@ -94,6 +95,13 @@ namespace proto2
     auto World::player_action_move(const godot::Vector2i& direction) -> godot::Array
     {
         return play_action(model::actions::Move{ model::Vector2{ direction.x, direction.y } });
+    }
+
+    godot::Array World::player_action_attack(const godot::Vector2i& target_position)
+    {
+        return play_action(model::actions::Attack{
+            .relative_target = model::Vector2{ target_position.x, target_position.y },
+        });
     }
 
 }

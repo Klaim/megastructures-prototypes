@@ -348,7 +348,7 @@ namespace proto2::model
     {
         struct Waited
         {
-            BodyID body_id;
+            EntityID body_id;
 
             std::string text_description() const { return std::format("Body{{{}}} waited.", body_id); }
         };

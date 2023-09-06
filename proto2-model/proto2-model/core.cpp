@@ -9,49 +9,42 @@
 namespace proto2::model
 {
 
-
-    namespace
+    int random_int(int min_value, int max_value)
     {
-
-        int random_int(int min_value, int max_value)
-        {
-            static std::random_device random_device;
-            static std::default_random_engine random_engine(random_device());
-            std::uniform_int_distribution<int> uniform_dist(min_value, max_value);
-            return uniform_dist(random_engine);
-        }
-
-        Position random_position(const Rectangle& area_section)
-        {
-            return {
-                /*.x =*/ random_int(area_section.lowest_x(), area_section.highest_x() - 1),
-                /*.y =*/ random_int(area_section.lowest_y(), area_section.highest_y() - 1),
-            };
-        }
-
-        Position random_position(const Area& area)
-        {
-            return random_position(Rectangle{
-                .position = {},
-                .size = area.size
-                });
-        }
-
-        Position random_free_position(const Area& area, int max_attempts = 1000)
-        {
-            while(max_attempts--)
-            {
-                auto new_pos = random_position(area);
-                if(std::ranges::none_of(area.walls, [&](const auto& wall_pos){ return wall_pos == new_pos; }))
-                {
-                    return new_pos;
-                }
-            }
-            return {};
-        }
-
+        static std::random_device random_device;
+        static std::default_random_engine random_engine(random_device());
+        std::uniform_int_distribution<int> uniform_dist(min_value, max_value);
+        return uniform_dist(random_engine);
     }
 
+    Position random_position(const Rectangle &area_section)
+    {
+        return {
+            /*.x =*/random_int(area_section.lowest_x(), area_section.highest_x() - 1),
+            /*.y =*/random_int(area_section.lowest_y(), area_section.highest_y() - 1),
+        };
+    }
+
+    Position random_position(const Area &area)
+    {
+        return random_position(Rectangle{
+            .position = {},
+            .size = area.size});
+    }
+
+    Position random_free_position(const Area &area, int max_attempts)
+    {
+        while (max_attempts--)
+        {
+            auto new_pos = random_position(area);
+            if (std::ranges::none_of(area.walls, [&](const auto &wall_pos)
+                                     { return wall_pos == new_pos; }))
+            {
+                return new_pos;
+            }
+        }
+        return {};
+    }
 
     ActorID Actor::new_id()
     {
@@ -97,6 +90,22 @@ namespace proto2::model
             });
     }
 
+    std::optional<EntityID> World::entity_at(const Position& position) const
+    {
+        auto bodies = entities.view<Body>();
+
+        for(const auto& [entity_id, body] : bodies.each())
+        {
+            if(body.position == position)
+            {
+                return entity_id;
+            }
+        }
+
+        return {};
+    }
+
+
     Area create_test_area(Size size, int wall_count)
     {
         Area area{
@@ -133,14 +142,15 @@ namespace proto2::model
 
     void create_new_character(World& world, Actor actor)
     {
-        const auto body_id = world.entities.create();
+        const auto entity_id = world.entities.create();
         const auto actor_id = Actor::new_id();
         world.actors.insert({ actor_id, std::move(actor) });
-        world.entities.emplace<Body>(body_id, Body{
-            .id = body_id,
+        world.entities.emplace<Body>(entity_id, Body{
+            .id = entity_id,
             .position = random_free_position(world.area),
             .actor_id = actor_id,
         });
+        world.entities.emplace<DamageState>(entity_id, DamageState{});
     }
 
     struct SpawnCharacter

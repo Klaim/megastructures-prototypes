@@ -47,6 +47,8 @@ namespace proto2::model
         constexpr Vector2 up() const noexcept;
         constexpr Vector2 down() const noexcept;
 
+        int distance_to(const Vector2& other) const noexcept;
+
     };
     static_assert(std::regular<Vector2>);
     BOOST_DESCRIBE_STRUCT(Vector2, (), (x, y));
@@ -61,6 +63,10 @@ namespace proto2::model
     constexpr Vector2 Vector2::right() const noexcept { return *this + Vector2_RIGHT; }
     constexpr Vector2 Vector2::up() const noexcept { return *this + Vector2_UP; }
     constexpr Vector2 Vector2::down() const noexcept { return *this + Vector2_DOWN; }
+    inline int Vector2::distance_to(const Vector2& other) const noexcept
+    {
+        return std::abs(x - other.x) + std::abs(y - other.y);
+    }
 
     using Position = Vector2;
 
@@ -102,7 +108,7 @@ namespace proto2::model
     }
 
     using ActorID = int;
-    using BodyID = entt::registry::entity_type;
+    using EntityID = entt::registry::entity_type;
 
 
     class AnyAction;
@@ -128,12 +134,26 @@ namespace proto2::model
 
     struct Body
     {
-        BodyID id = {};
+        EntityID id = {};
         Position position;
         std::optional<ActorID> actor_id;
         bool last_action_failed = false;
 
         bool can_act() const { return actor_id.has_value(); }
+    };
+
+    struct DamageState
+    {
+        int dammages = 0;
+        int destruction_threashold = 1;
+
+        bool is_destroyed() const { return dammages >= destruction_threashold; }
+        bool is_alive() const { return not is_destroyed(); }
+
+        void take_damages(int additional_damages)
+        {
+            dammages += additional_damages;
+        }
     };
 
 
@@ -156,6 +176,7 @@ namespace proto2::model
         bool is_controlled_by_player(const Body& body) const;
 
         bool is_free_position(const Position& position) const;
+        std::optional<EntityID> entity_at(const Position& position) const;
     };
 
 
@@ -168,11 +189,23 @@ namespace proto2::model
     PROTO2_MODEL_SYMEXPORT
     void create_new_character(World& world, Actor actor);
 
+    PROTO2_MODEL_SYMEXPORT
+    int random_int(int min_value, int max_value);
+
+    PROTO2_MODEL_SYMEXPORT
+    Position random_position(const Rectangle &area_section);
+
+    PROTO2_MODEL_SYMEXPORT
+    Position random_position(const Area &area);
+
+    PROTO2_MODEL_SYMEXPORT
+    Position random_free_position(const Area &area, int max_attempts = 1000);
+
 }
 
-template <> struct std::formatter<proto2::model::BodyID> : std::formatter<unsigned long>
+template <> struct std::formatter<proto2::model::EntityID> : std::formatter<unsigned long>
 {
-    auto format(proto2::model::BodyID id, std::format_context& ctx) const
+    auto format(proto2::model::EntityID id, std::format_context& ctx) const
     {
         return formatter<unsigned long>::format(static_cast<unsigned long>(id), ctx);
     }

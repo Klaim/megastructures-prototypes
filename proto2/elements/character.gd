@@ -25,7 +25,7 @@ func _process(_delta):
 		position = lerp(position, _target_position, 0.1)
 
 func move_to(new_position: Vector2i):
-	print("====> moving to %s" % new_position)
+#	print("====> moving to %s" % new_position)
 	_target_position = Vector3(new_position.x, 0.0, new_position.y) * 1.0 # FIXME: setup global meters per squares
 
 
