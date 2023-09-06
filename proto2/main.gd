@@ -22,16 +22,16 @@ func _process(_delta):
 		events_sequence = _world.player_action_wait()
 
 	elif Input.is_action_just_pressed("player_action_move_up"):
-		events_sequence = _world.player_action_move_up()
+		events_sequence = _world.player_action_move(Vector2i.UP)
 
 	elif Input.is_action_just_pressed("player_action_move_down"):
-		events_sequence = _world.player_action_move_down()
+		events_sequence = _world.player_action_move(Vector2i.DOWN)
 
 	elif Input.is_action_just_pressed("player_action_move_left"):
-		events_sequence = _world.player_action_move_left()
+		events_sequence = _world.player_action_move(Vector2i.LEFT)
 
 	elif Input.is_action_just_pressed("player_action_move_right"):
-		events_sequence = _world.player_action_move_right()
+		events_sequence = _world.player_action_move(Vector2i.RIGHT)
 
 	if events_sequence:
 		update_world_view(events_sequence)

@@ -23,10 +23,7 @@ namespace proto2
         auto get_player_positions() const -> godot::TypedArray<godot::Vector2i>;
 
         godot::Array player_action_wait();
-        godot::Array player_action_move_up();
-        godot::Array player_action_move_down();
-        godot::Array player_action_move_left();
-        godot::Array player_action_move_right();
+        godot::Array player_action_move(const godot::Vector2i& direction);
 
         // Applies an action from the player and processes turns until it's the player's
         // turn again.

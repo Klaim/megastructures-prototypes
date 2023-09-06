@@ -16,10 +16,7 @@ namespace proto2
         ClassDB::bind_method(D_METHOD("get_characters_positions"), &World::get_characters_positions);
         ClassDB::bind_method(D_METHOD("get_player_positions"), &World::get_player_positions);
         ClassDB::bind_method(D_METHOD("player_action_wait"), &World::player_action_wait);
-        ClassDB::bind_method(D_METHOD("player_action_move_up"), &World::player_action_move_up);
-        ClassDB::bind_method(D_METHOD("player_action_move_down"), &World::player_action_move_down);
-        ClassDB::bind_method(D_METHOD("player_action_move_left"), &World::player_action_move_left);
-        ClassDB::bind_method(D_METHOD("player_action_move_right"), &World::player_action_move_right);
+        ClassDB::bind_method(D_METHOD("player_action_move"), &World::player_action_move);
 
     }
 
@@ -94,24 +91,9 @@ namespace proto2
         return play_action(model::actions::Wait{});
     }
 
-    auto World::player_action_move_up() -> godot::Array
+    auto World::player_action_move(const godot::Vector2i& direction) -> godot::Array
     {
-        return play_action(model::actions::Move_UP);
-    }
-
-    auto World::player_action_move_down() -> godot::Array
-    {
-        return play_action(model::actions::Move_DOWN);
-    }
-
-    auto World::player_action_move_left() -> godot::Array
-    {
-        return play_action(model::actions::Move_LEFT);
-    }
-
-    auto World::player_action_move_right() -> godot::Array
-    {
-        return play_action(model::actions::Move_RIGHT);
+        return play_action(model::actions::Move{ model::Vector2{ direction.x, direction.y } });
     }
 
 }
