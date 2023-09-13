@@ -114,7 +114,11 @@ func update_world_view(events: Array) -> void:
 
 			"proto2::model::events::Destroyed":
 				var character_view : Node3D = get_character_view(event.destroyed_id)
-				character_view.destroy()
+				await character_view.destroy()
 				remove_character_view(event.destroyed_id)
 
+			"proto2::model::events::Attacked":
+				var character_view : Node3D = get_character_view(event.attacker)
+				var target_position := Vector2i(event.target.x, event.target.y)
+				await character_view.attack(target_position)
 

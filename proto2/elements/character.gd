@@ -37,13 +37,19 @@ func _process(_delta):
 
 func move_to(new_position: Vector2i):
 #	print("====> moving to %s" % new_position)
-	_target_position = Vector3(new_position.x, 0.0, new_position.y) * 1.0 # FIXME: setup global meters per squares
+	_target_position = Spatial.to_view_position(new_position)
 
 
-func destroy() -> void:
+func destroy():
 	var animation : Tween = start_animation()
 	animation.tween_property(self, "global_position", global_position + (Vector3.DOWN * 2.0), 0.5)
 	await animation.finished
 	get_parent().remove_child(self)
 	queue_free()
 
+func attack(target_position: Vector2i):
+	var target = Spatial.to_view_position(target_position)
+	var animation : Tween = start_animation()
+	animation.tween_property(self, "global_position", target, 0.1)
+	animation.tween_property(self, "global_position", _target_position, 0.1)
+	await animation.finished
