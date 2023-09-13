@@ -72,14 +72,14 @@ namespace proto2
     {
         godot::Array events_sequence;
 
-        godot::UtilityFunctions::print("Player's action: {}, processing turns...", action.type_id().name());
+        godot::UtilityFunctions::print("Player's action: ", action.type_id().name(), ", processing turns...");
         const auto turn_info = m_turn_solver.play_action_until_next_turn(std::move(action));
         godot::UtilityFunctions::print("Processing turns - DONE");
         godot::UtilityFunctions::print("Current Turn = ", turn_info.current_turn);
 
         for(const auto& event : turn_info.events)
         {
-            godot::UtilityFunctions::print("  -> ", event.text_description().c_str());
+            godot::UtilityFunctions::print(" -> ", event.type_name().c_str(), " : ", event.text_description().c_str());
             auto event_godot = to_godot(event);
             events_sequence.push_back(event_godot);
         }

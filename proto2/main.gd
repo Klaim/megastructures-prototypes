@@ -87,8 +87,11 @@ func build_world_view_from_scratch() -> void:
 
 	print("-> Building view - DONE")
 
-func get_character_view(body_id):
+func get_character_view(body_id:int):
 	return _character_views.get(body_id)
+
+func remove_character_view(body_id:int):
+	_character_views.erase(body_id)
 
 func update_world_view(events: Array) -> void:
 	for event in events:
@@ -101,10 +104,17 @@ func update_world_view(events: Array) -> void:
 			"proto2::model::events::Moved":
 #				print("-> Character %s just moved from %s to %s" % [ event.body_id, event.initial_position, event.new_position ])
 				var new_position := Vector2i(event.new_position.x, event.new_position.y)
-				var character_view : Node3D = get_character_view(event.body_id as int)
+				var character_view : Node3D = get_character_view(event.body_id)
 				character_view.move_to(new_position)
 
 			"proto2::model::events::FailedToMove":
 #				print("-> Character %s failed to move." % event.body_id)
 				pass
+
+
+			"proto2::model::events::Destroyed":
+				var character_view : Node3D = get_character_view(event.destroyed_id)
+				character_view.destroy()
+				remove_character_view(event.destroyed_id)
+
 
