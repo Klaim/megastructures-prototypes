@@ -57,7 +57,6 @@ namespace proto2::model::actions
                 });
             }
 
-            return results;
         }
         else
         {
@@ -67,7 +66,7 @@ namespace proto2::model::actions
             });
         }
 
-        return ActionResults{};
+        return results;
     }
 
 
