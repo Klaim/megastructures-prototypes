@@ -30,11 +30,13 @@ See the presenttion above for more details.
 
 ## Prototye 2 - Overview
 
-*NOTE: this prototype was not started yet.*
-
 **[Presentation Slides](https://docs.google.com/presentation/d/1XM9JxWTizGZZ8XIcwMebkeGHMlniPzWu_NUlUcsEjgM/edit?usp=sharing)**
 
 For this prototype we will use Godot as the "view" implementation and a C++ library as the "model". The goal is mainly to evaluate how difficult it makes working on the game. Depending on the resuts, we might decide to go with Godot, or try with Unreal or switch to a C++ graphic rendering library instead.
+
+- `proto2/` : the Godot project. It requires the GDExtension to be installed to work or even be open successfully in the Godot editor. It contains the GDScripts that provides the visual representation and input handling for the prototype. The rest comes from the other packages/libraries.
+- `proto2-view/` : this is our GDExtension (Godot plugin loaded at startup of the game or editor) exposing the information necessary for the GDScripts to work, including the state of the model and ways to request actions and events resulting from them.
+- `proto2-model/` : started as a copy of the model library in prototype1, this is the whole game's logic and core data. Features are first added here then handled in the two other layers.
 
 ## Prototype 3 - Overview
 
