@@ -19,8 +19,7 @@ Presentation and links
 
 For this prototype the goal is to evaluate the C++-based techs/tools stack for the game by building a minimalistic roguelike game with the following elements being used for evaluation:
 - Bleeding-edge C++ (beyond C++ 23 where possible)
-- [`build2`](https://build2.org) as build-system and dependency manager
-    - WARNING: At this moment we need either `v0.16.0 alpha`, which is the stage version so use the stage version, but once released you can juste use `v0.16.0` or higher version.
+- [`build2`](https://build2.org) as build-system and dependency manager, version `v0.16.0` or higher.
 - View separate from model (`proto1` is the executable acting as a view, `proto1-model` is the model library)
 - Entity Component System setup on the model (using [`entt`](https://github.com/skypjack/entt) as implementation)
 - C++ coroutines to implement the action-turn logic (using `std::generator`)
@@ -59,9 +58,9 @@ However if you still want to build the project yourself, here are some instructi
 
 You need to install:
 - a toolchain: Visual Studio C++/MSVC, LLVM/clang or gcc depending on your platform and choice:
-    - **clang must be v16.x** (or higher if you modify the build configs);
+    - **clang must be v17.x** (or higher if you modify the build configs);
     - **msvc must be the last available** version from Visual Studio 2022 (or preview)
-    - **gcc must be 12.x or higher**
+    - **gcc must be 13.x or higher**
 - **on Windows** I recommend using `Git-Bash` (which is installed with `git`) to run the commands and scripts below;
 - [`build2`](https://build2.org) as buildsystem and dependency manager.
     If you are not familiar with `build2` I recommend to read at least the [toolchain introduction](https://build2.org/build2-toolchain/doc/build2-toolchain-intro.xhtml), however you don't need to read it to proceed with the following instructions - you might need to read it if you want to submit a PR.
@@ -99,7 +98,7 @@ These commands gather the dependencies, build the projects and install the whole
     ```bash
     ./init-configs.sh clang --clean
     ```
-    
+
     This script create the configurations for the toolchain and initialize all the projects in it.
     The first toolchain's debug configuration will be set as the default when using `build2` without specifying a configuration.
 
@@ -115,7 +114,7 @@ These commands gather the dependencies, build the projects and install the whole
     bdep update @msvc-debug @clang-debug  # Build in debug configurations using msvc and clang
     bdep update -a # Build in all configurations initialized
     ```
-    
+
 3. To build and run the tests:
     ```bash
     bdep test -a # build and run all the tests of all the configurations
