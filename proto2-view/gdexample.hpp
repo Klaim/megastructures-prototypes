@@ -20,7 +20,7 @@ namespace proto2
 
         void _process(double delta) override;
 
-        void _ready();
+        void _ready() override;
     };
 
 }

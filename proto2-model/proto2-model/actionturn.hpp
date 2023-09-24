@@ -327,7 +327,7 @@ namespace proto2::model
                 return boost::typeindex::type_id<T>();
             }
 
-            json reflection() const
+            json reflection() const override
             {
                 return ::proto2::model::reflection(impl);
             }
