@@ -69,13 +69,13 @@ jobs:
           version: latest
           platform: x64
 
-      - name: Clang 16 version alias on non-linux OS
-        if: matrix.toolchain == 'clang16' && !startsWith('ubuntu', matrix.os)
-        run: echo "$aalias clang-16='clang'" >> ~/.bashrc && echo "$aalias clang++-16='clang++'" >> ~/.bashrc
+      - name: Clang 17 version alias on non-linux OS
+        if: matrix.toolchain == 'clang17' && !startsWith('ubuntu', matrix.os)
+        run: echo "$aalias clang-17='clang'" >> ~/.bashrc && echo "$aalias clang++-17='clang++'" >> ~/.bashrc
 
-      - name: GCC 12 version alias on non-linux OS
-        if: matrix.toolchain == 'gcc12' && !startsWith('ubuntu', matrix.os)
-        run: echo "$aalias gcc-12='gcc'" >> ~/.bashrc && echo "$aalias g++-12='g++'" >> ~/.bashrc
+      - name: GCC 13 version alias on non-linux OS
+        if: matrix.toolchain == 'gcc13' && !startsWith('ubuntu', matrix.os)
+        run: echo "$aalias gcc-13='gcc'" >> ~/.bashrc && echo "$aalias g++-13='g++'" >> ~/.bashrc
 
       - name: Info about clang
         if: startswith('clang', matrix.toolchain)
