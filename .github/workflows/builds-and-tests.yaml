@@ -8,14 +8,14 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
-        toolchain: [msvc, gcc, clang, clang16, gcc12]
+        toolchain: [msvc, gcc, clang, clang17, gcc13]
         exclude:
           - os: ubuntu-latest
             toolchain: msvc
           - os: ubuntu-latest # TODO: Remove this one once the clang with libc++ is fixed
             toolchain: clang
           - os: ubuntu-latest
-            toolchain: clang16
+            toolchain: clang17
           - os: macos-latest
             toolchain: msvc
           - os: macos-latest # TODO: Remove this one once the clang of the system is fixed
@@ -25,7 +25,7 @@ jobs:
           - os: windows-latest
             toolchain: gcc
           - os: windows-latest
-            toolchain: gcc12
+            toolchain: gcc13
 
     name: Build & Run Tests
     runs-on: ${{ matrix.os }}
