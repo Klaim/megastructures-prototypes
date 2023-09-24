@@ -122,3 +122,6 @@ func update_world_view(events: Array) -> void:
 				var target_position := Vector2i(event.target.x, event.target.y)
 				await character_view.attack(target_position)
 
+			"proto2::model::events::Evaded":
+				# TODO: implement animation
+
