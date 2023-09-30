@@ -163,7 +163,7 @@ namespace proto2::model
         template<Event T>
         const T& value() const
         {
-            return const_cast<AnyEvent&>(*this).value();
+            return const_cast<AnyEvent&>(*this).value<T>();
         }
 
     private:
@@ -291,7 +291,7 @@ namespace proto2::model
         template<Action T>
         const T& value() const
         {
-            return const_cast<AnyAction*>(this)->value();
+            return const_cast<AnyAction*>(this)->value<T>();
         }
 
     private:

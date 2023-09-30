@@ -31,6 +31,11 @@ TEST_CASE( "AnyAction works" )
     {
         model::AnyAction action = model::actions::Move_UP;
     }
+    {
+        model::AnyAction action = model::actions::Move{};
+        const auto& move = action.value<model::actions::Move>();
+        const auto& direction = move.direction;
+    }
 }
 
 TEST_CASE( "Vector2 is constexpr" )
