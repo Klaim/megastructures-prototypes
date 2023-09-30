@@ -15,7 +15,7 @@ namespace std
         // an empty function body and the noreturn attribute.
     #ifdef __GNUC__ // GCC, Clang, ICC
         __builtin_unreachable();
-    #elifdef _MSC_VER // MSVC
+    #elif defined(_MSC_VER) // MSVC
         __assume(false);
     #endif
     }
