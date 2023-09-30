@@ -13,7 +13,7 @@ namespace proto2::model
 
             std::string text_description() const
             {
-                return std::format("Body{{{}}} attacked targetting {{{}, {}}}", attacker, target.x, target.y);
+                return fmt::format("Body{{{}}} attacked targetting {{{}, {}}}", attacker, target.x, target.y);
             }
         };
         BOOST_DESCRIBE_STRUCT(Attacked, (), (attacker, target));
@@ -27,7 +27,7 @@ namespace proto2::model
 
             std::string text_description() const
             {
-                return std::format("Body{{{}}} took {} damages from Body{{{}}}'s attack", target, damages, attacker);
+                return fmt::format("Body{{{}}} took {} damages from Body{{{}}}'s attack", target, damages, attacker);
             }
 
         };
@@ -41,7 +41,7 @@ namespace proto2::model
 
             std::string text_description() const
             {
-                return std::format("Body{{{}}} evaded the attack from Body{{{}}}", evader, attacker);
+                return fmt::format("Body{{{}}} evaded the attack from Body{{{}}}", evader, attacker);
             }
         };
         BOOST_DESCRIBE_STRUCT(Evaded, (), (evader, attacker));
@@ -53,7 +53,7 @@ namespace proto2::model
 
             std::string text_description() const
             {
-                return std::format("Body{{{}}} is destroyed", destroyed_id);
+                return fmt::format("Body{{{}}} is destroyed", destroyed_id);
             }
         };
         BOOST_DESCRIBE_STRUCT(Destroyed, (), (destroyed_id));

@@ -5,12 +5,12 @@
 #include <type_traits>
 #include <memory>
 #include <string>
-#include <format>
 #include <any>
 
 #include <boost/type_index.hpp>
 #include <boost/algorithm/string/erase.hpp>
 
+#include <fmt/format.h>
 #include <tl/generator.hpp>
 #include <nlohmann/json.hpp>
 
@@ -156,7 +156,7 @@ namespace proto2::model
             const auto requested_type_id = boost::typeindex::type_id<T>();
             const auto stored_type_id = type_id();
             if( requested_type_id != stored_type_id )
-                throw std::invalid_argument(std::format("wrong type stored, requested '{}' but stored is '{}'", requested_type_id.pretty_name(), stored_type_id.pretty_name()));
+                throw std::invalid_argument(fmt::format("wrong type stored, requested '{}' but stored is '{}'", requested_type_id.pretty_name(), stored_type_id.pretty_name()));
             return static_cast<Impl<T>*>(storage.get())->impl;
         }
 
@@ -284,7 +284,7 @@ namespace proto2::model
             const auto requested_type_id = boost::typeindex::type_id<T>();
             const auto stored_type_id = type_id();
             if( requested_type_id != stored_type_id )
-                throw std::invalid_argument(std::format("wrong type stored, requested '{}' but stored is '{}'", requested_type_id.pretty_name(), stored_type_id.pretty_name()));
+                throw std::invalid_argument(fmt::format("wrong type stored, requested '{}' but stored is '{}'", requested_type_id.pretty_name(), stored_type_id.pretty_name()));
             return static_cast<Impl<T>*>(storage.get())->impl;
         }
 
@@ -350,7 +350,7 @@ namespace proto2::model
         {
             EntityID body_id;
 
-            std::string text_description() const { return std::format("Body{{{}}} waited.", body_id); }
+            std::string text_description() const { return fmt::format("Body{{{}}} waited.", body_id); }
         };
         BOOST_DESCRIBE_STRUCT(Waited, (), (body_id));
 

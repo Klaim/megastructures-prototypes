@@ -4,8 +4,8 @@
 #include <optional>
 #include <vector>
 #include <functional>
-#include <format>
 
+#include <fmt/format.h>
 #include <boost/container/flat_map.hpp>
 #include <boost/describe.hpp>
 #include <entt/entt.hpp>
@@ -203,9 +203,9 @@ namespace proto2::model
 
 }
 
-template <> struct std::formatter<proto2::model::EntityID> : std::formatter<unsigned long>
+template <> struct fmt::formatter<proto2::model::EntityID> : fmt::formatter<unsigned long>
 {
-    auto format(proto2::model::EntityID id, std::format_context& ctx) const
+    auto format(proto2::model::EntityID id, fmt::format_context& ctx) const
     {
         return formatter<unsigned long>::format(static_cast<unsigned long>(id), ctx);
     }

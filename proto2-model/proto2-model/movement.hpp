@@ -19,7 +19,7 @@ namespace proto2::model
 
             std::string text_description() const
             {
-                return std::format("Body{{{}}} moved from {{ {}, {} }} to {{ {}, {} }}",
+                return fmt::format("Body{{{}}} moved from {{ {}, {} }} to {{ {}, {} }}",
                     body_id,
                     initial_position.x, initial_position.y,
                     new_position.x, new_position.y
@@ -36,7 +36,7 @@ namespace proto2::model
 
             std::string text_description() const
             {
-                return std::format("Body{{{}}} attempted to move to {{ {}, {} }} but failed",
+                return fmt::format("Body{{{}}} attempted to move to {{ {}, {} }} but failed",
                     body_id,
                     target_position.x, target_position.y
                 );
