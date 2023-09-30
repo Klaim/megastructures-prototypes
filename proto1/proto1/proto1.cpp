@@ -10,6 +10,8 @@
 #include <imgui/imgui.h>
 #include <imgui/backends/imgui-SFML.h>
 
+#include <stdx/unreachable.hpp>
+
 #include <proto1-model/core.hpp>
 #include <proto1-model/movement.hpp>
 
@@ -165,7 +167,7 @@ int main(int argc, char** args)
 
     view::View world_view{ world, std::move(view_config) };
 
-    boost::unordered::unordered_flat_map<sf::Keyboard::Key, KeyStateTracker> keys_state{ 
+    boost::unordered::unordered_flat_map<sf::Keyboard::Key, KeyStateTracker> keys_state{
         key_state_tracker_pair(sf::Keyboard::Escape),
         key_state_tracker_pair(sf::Keyboard::Space),
         key_state_tracker_pair(sf::Keyboard::Left),
@@ -187,7 +189,7 @@ int main(int argc, char** args)
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-        
+
         // update input
         for (auto&& [key, tracker] : keys_state)
         {
@@ -200,7 +202,7 @@ int main(int argc, char** args)
             break;
         }
 
-        std::optional<model::AnyAction> maybe_player_action; 
+        std::optional<model::AnyAction> maybe_player_action;
 
         if (keys_state[sf::Keyboard::Space].get_state() == KeyState::just_down)
         {
