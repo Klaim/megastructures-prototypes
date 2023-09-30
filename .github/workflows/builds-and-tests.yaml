@@ -45,7 +45,7 @@ jobs:
       - name: Install build2
         uses: build2/setup-build2-github-action@v2
         with:
-          build2-version: 0.16.0
+          build2-version: staged
       - name: build2 setup info
         shell: bash
         run: b --version && bdep --version && bpkg --version
