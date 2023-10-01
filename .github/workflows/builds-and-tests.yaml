@@ -20,8 +20,8 @@ jobs:
           #   toolchain: gcc
           # - os: macos-latest # TODO: Remove this one once the clang on macos is fixed
           #   toolchain: clang
-          # - os: windows-latest
-          #   toolchain: gcc
+          - os: windows-latest
+            toolchain: gcc
 
     name: Build & Run Tests
     runs-on: ${{ matrix.os }}
