@@ -8,12 +8,14 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
-        toolchain: [msvc, gcc, clang]
+        toolchain: [msvc, gcc, clang, clang17, gcc13]
         exclude:
           - os: ubuntu-latest
             toolchain: msvc
           - os: ubuntu-latest # TODO: Remove this one once the clang with libc++ is fixed
             toolchain: clang
+          - os: ubuntu-latest
+            toolchain: clang17
           - os: macos-latest
             toolchain: msvc
           - os: macos-latest # TODO: Remove this one once the clang of the system is fixed
@@ -22,6 +24,8 @@ jobs:
             toolchain: clang
           - os: windows-latest
             toolchain: gcc
+          - os: windows-latest
+            toolchain: gcc13
 
     name: Build & Run Tests
     runs-on: ${{ matrix.os }}
@@ -59,18 +63,28 @@ jobs:
           platform: x64
 
       - name: Install recent GCC
-        if: matrix.toolchain == 'gcc'
+        if: startsWith('gcc', matrix.toolchain)
         uses: egor-tensin/setup-gcc@v1
         with:
           version: latest
           platform: x64
 
+      - name: Clang 17 version alias on non-linux OS
+        if: matrix.toolchain == 'clang17' && !startsWith('ubuntu', matrix.os)
+        run: echo "$aalias clang-17='clang'" >> ~/.bashrc && echo "$aalias clang++-17='clang++'" >> ~/.bashrc
+
+      - name: GCC 13 version alias on non-linux OS
+        if: matrix.toolchain == 'gcc13' && !startsWith('ubuntu', matrix.os)
+        run: echo "$aalias gcc-13='gcc'" >> ~/.bashrc && echo "$aalias g++-13='g++'" >> ~/.bashrc
+
       - name: Info about clang
-        if: matrix.toolchain == 'clang'
+        if: startswith('clang', matrix.toolchain)
         run: clang++ --version
+
       - name: Info about gcc
-        if: matrix.toolchain == 'gcc'
+        if: startsWith('gcc', matrix.toolchain)
         run: g++ --version
+
       # We omit trying to find `cl` from msvc because it's annoying, and the info is already in steps below.
       - name: Info about toolchain
         run: echo "Look into 'Create all build configurations' step for details about the toolchain."
