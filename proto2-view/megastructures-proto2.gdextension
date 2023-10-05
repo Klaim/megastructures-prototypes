@@ -1,7 +1,9 @@
 [configuration]
 
 entry_symbol = "init_megastructures_proto2_gdextension"
-compatibility_minimum = 4.1
+compatibility_minimum = 4.2
+
+reloadable = true
 
 [libraries]
 

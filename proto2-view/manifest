@@ -15,7 +15,7 @@ depends: * bpkg >= 0.16.0
 #depends: libhello ^1.0.0
 
 depends: proto2-model == $
-depends: godot-cpp ~4.1.0
+depends: godot-cpp ~4.2.0-
 depends: { libboost-pfr libboost-type-index libboost-describe libboost-mp11 } ^1.81.0
 
 
