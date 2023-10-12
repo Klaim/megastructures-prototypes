@@ -33,6 +33,7 @@ namespace proto2
 
 
         void _ready() override;
+        void _process(double delta) override;
 
     private:
         proto2::model::World m_world = model::create_test_world();

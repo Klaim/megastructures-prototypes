@@ -31,7 +31,7 @@
             "name": "proto2 (godot-editor vs-debug)",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "godot",
+            "program": "E:/tools/godot/Godot_v4.2-dev6_win64.exe",
             "args": [ "${workspaceFolder}/proto2", "--editor" ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/proto2",

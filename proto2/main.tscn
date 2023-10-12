@@ -1,7 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://dv3t45nuobex5"]
+[gd_scene load_steps=3 format=3 uid="uid://dv3t45nuobex5"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_aaq5h"]
-[ext_resource type="Texture2D" uid="uid://d27i4vhtm28da" path="res://icon.svg" id="2_54lwc"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_81sch"]
 albedo_color = Color(0.113725, 0.133333, 0.160784, 1)
@@ -20,11 +19,6 @@ material = SubResource("StandardMaterial3D_81sch")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.578242, 0.815865, 0, -0.815865, 0.578242, 25.5956, 12.8852, 38.0003)
-
-[node name="GDExample" type="GDExample" parent="."]
-position = Vector2(1121, 28)
-scale = Vector2(0.304688, 0.304688)
-texture = ExtResource("2_54lwc")
 
 [node name="megastructures_world" type="World" parent="."]
 

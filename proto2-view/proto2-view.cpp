@@ -35,6 +35,23 @@ namespace proto2
         m_turn_solver.start_until_player_turn();
     }
 
+    void World::_process(double delta)
+    {
+        Node::_process(delta);
+
+        static auto next_print = std::chrono::high_resolution_clock::now();
+        const auto start_new_cycle = [&]{
+            next_print = std::chrono::high_resolution_clock::now() + std::chrono::seconds{1};
+        };
+
+        const auto now = std::chrono::high_resolution_clock::now();
+        if(next_print <= now)
+        {
+            godot::UtilityFunctions::print("CCCCCC");
+            start_new_cycle();
+        }
+    }
+
     auto World::get_walls_positions() const -> godot::TypedArray<godot::Vector2i>
     {
         godot::UtilityFunctions::print("Gathering walls positions...");

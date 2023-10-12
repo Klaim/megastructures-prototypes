@@ -17,10 +17,10 @@ namespace proto2
 
     void GDExample::_process(double delta)
     {
-        if( godot::Engine::get_singleton()->is_editor_hint() )
-            return;
+        // if( godot::Engine::get_singleton()->is_editor_hint() )
+        //     return;
 
-        rotate(sin(delta));
+        rotate(cos(delta));
     }
 
     void GDExample::_ready()

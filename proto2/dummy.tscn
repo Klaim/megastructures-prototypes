@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://drsx6ikhh0l6i"]
+
+[ext_resource type="Texture2D" uid="uid://d27i4vhtm28da" path="res://icon.svg" id="1_b7pui"]
+
+[node name="Dummy" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+
+[node name="GDExample" type="GDExample" parent="Camera3D"]
+position = Vector2(505, 145)
+texture = ExtResource("1_b7pui")
