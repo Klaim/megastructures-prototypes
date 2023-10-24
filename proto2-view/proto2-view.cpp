@@ -47,7 +47,7 @@ namespace proto2
         const auto now = std::chrono::high_resolution_clock::now();
         if(next_print <= now)
         {
-            godot::UtilityFunctions::print("CCCCCC");
+            godot::UtilityFunctions::print("World - XXXXXXXXXXXXX");
             start_new_cycle();
         }
     }
